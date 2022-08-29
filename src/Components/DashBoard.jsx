@@ -1,9 +1,229 @@
-import React from 'react';
+import { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
+import SideBar from './Common/SideBar';
+import Header from './Common/Header';
+import {
+  getTweetAPI,
+  newTweetAPI,
+  updateTweetAPI,
+  deleteTweetAPI,
+} from 'js/API';
+import { getCookie } from 'js/cookie';
+import { errorInfo, follow, unFollow, enterFn } from 'js/common';
 
 const DashBoard = () => {
+  const [write, setWrite] = useState(false);
+  const [edit, setEdit] = useState(false);
+  const [list, setList] = useState([]);
+  const [view, setView] = useState('all');
+  const [editIdx, setEditIdx] = useState('');
+  const [content, setContent] = useState('');
+  let prevent = false;
+
+  useEffect(() => {
+    document.title = '메인 | Moana Tweet';
+  }, []);
+
+  useEffect(() => {
+    getTweet();
+  }, [view]);
+
+  const getTweet = async () => {
+    if (prevent) return;
+    prevent = true;
+    setTimeout(() => {
+      prevent = false;
+    }, 200);
+
+    const result = await getTweetAPI(view);
+    if (typeof result === 'object') {
+      setList(result.data);
+    } else return alert(errorInfo[result]);
+  };
+
+  const newTweet = async () => {
+    if (edit) return alert('수정 중에는 글을 게시할 수 없습니다.')
+    const result = await newTweetAPI(content);
+    if (typeof result === 'object') {
+      getTweet();
+      setWrite(false);
+      setContent('');
+    } else return alert(errorInfo[result]);
+  };
+
+  const editTweet = async () => {
+    if (write) {
+      setEdit(false)
+      return alert('글을 작성하는 중에는 수정할 수 없습니다.')
+    }
+    const result = await updateTweetAPI(editIdx, content);
+    if (typeof result === 'object') {
+      getTweet();
+      setContent('');
+      setEdit(false);
+      setEditIdx('');
+    } else return alert(errorInfo[result]);
+  };
+
+  const delTweet = async id => {
+    if (!window.confirm('정말 이 트윗을 삭제하시겠습니까?')) return;
+    const result = await deleteTweetAPI(id);
+    if (typeof result === 'object') {
+      getTweet();
+      return alert('삭제 되었습니다.');
+    } else return alert(errorInfo[result]);
+  };
+
+  const renderTweet = () => {
+    if (list.length >= 1) {
+      return list.reduce(
+        (acc, { user_id, tweet, created_at, follow_chk, id }) => {
+          return (
+            <>
+              {acc}
+              <div className='tweet'>
+                <div className='tweet-info'>
+                  <div className='info-wrap'>
+                    <Link to={`/${user_id}`} className='userId'>
+                      @{user_id}
+                    </Link>
+                    {getCookie('myId') === user_id ? (
+                      id === editIdx && edit ? (
+                        <>
+                          <div
+                            className='btn editEnd'
+                            onClick={() => editTweet()}>
+                            완료
+                          </div>
+                          <div
+                            className='btn cancel'
+                            onClick={() => {
+                              setEdit(false);
+                              setEditIdx('');
+                              setContent('');
+                              return alert(
+                                '지금까지 수정한 내용은 반영되지 않습니다.\n정말 수정하지 않고 취소하시겠습니까?'
+                              );
+                            }}>
+                            취소
+                          </div>
+                        </>
+                      ) : (
+                        <>
+                          <div
+                            className={`btn edit`}
+                            onClick={() => {
+                              setEdit(true);
+                              setEditIdx(id);
+                            }}>
+                            수정
+                          </div>
+                          <div className='btn del' onClick={() => delTweet(id)}>
+                            삭제
+                          </div>
+                        </>
+                      )
+                    ) : view !== 'follow' ? (
+                      <div
+                        className={`btn ${follow_chk ? 'unFollow' : 'follow'}`}
+                        onClick={() => {
+                          if (follow_chk) {
+                            unFollow(user_id);
+                            getTweet();
+                            return;
+                          } else {
+                            follow(user_id);
+                            getTweet();
+                            return;
+                          }
+                        }}>
+                        {follow_chk ? 'UnFollow' : 'Follow'}
+                      </div>
+                    ) : (
+                      <div
+                        className='btn unFollow'
+                        onClick={() => {
+                          unFollow(user_id);
+                          getTweet();
+                          return;
+                        }}>
+                        UnFollow
+                      </div>
+                    )}
+                  </div>
+                  <div className='tweetDate'>
+                    {created_at.replaceAll('T', ' ')}
+                  </div>
+                </div>
+                <hr />
+                <div className='tweetContent'>
+                  {id === editIdx && edit ? (
+                    <textarea
+                      autoFocus
+                      defaultValue={tweet}
+                      onChange={e => setContent(e.target.value)}
+                      onKeyDown={e => enterFn(e, editTweet)}></textarea>
+                  ) : (
+                    tweet
+                  )}
+                </div>
+              </div>
+            </>
+          );
+        },
+        <></>
+      );
+    } else {
+      return (
+        <>{write ? '' : <div className='noneList'>목록이 없습니다.</div>}</>
+      );
+    }
+  };
+
   return (
-    <div>
-      
+    <div className='container'>
+      <Header />
+      <SideBar />
+      <div className='viewport'>
+        <div className='tweet-Home'>
+          <h1>Tweet</h1>
+          <hr />
+          <div className='topBar'>
+            {write ? (
+              <>
+                {' '}
+                <div className='postBtn' onClick={() => newTweet()}>
+                  게시
+                </div>
+                <div className='cancelBtn' onClick={() => {
+                  setWrite(false)
+                  setContent('')
+                }}>
+                  취소
+                </div>
+              </>
+            ) : (
+              <>
+                <div onClick={() => setWrite(true)}>글쓰기</div>
+                <select onChange={e => setView(e.target.value)} value={view}>
+                  <option value='all'>전체 트윗 보기</option>
+                  <option value='my'>내 트윗 보기</option>
+                  <option value='follow'>팔로우 트윗 보기</option>
+                </select>
+              </>
+            )}
+          </div>
+          {write && (
+            <textarea
+              autoFocus
+              className='writeArea'
+              onChange={e => setContent(e.target.value)}
+              value={content}
+              onKeyDown={e => enterFn(e, newTweet)}></textarea>
+          )}
+          {renderTweet()}
+        </div>
+      </div>
     </div>
   );
 };

@@ -1,0 +1,446 @@
+@charset "UTF-8";
+html,
+body,
+* {
+  font-family: "NotoSansR", "맑은 고딕", sans-serif;
+  color: #333;
+  font-size: 16px;
+}
+
+.row {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+}
+
+.column {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.bold {
+  font-family: "NotoSansB", "맑은 고딕", sans-serif;
+}
+
+.btn {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  font-family: "NotoSansB", "맑은 고딕", sans-serif;
+  cursor: pointer;
+  padding: 10px;
+  background-color: gray;
+  border-radius: 10px;
+  margin-right: 10px;
+  color: white;
+  transition: all 0.5s;
+}
+.btn.follow, .btn.editEnd {
+  transition: all 0.5s;
+  background-color: green;
+}
+.btn.del, .btn.cancel {
+  background-color: rgb(212, 0, 0);
+}
+
+h1 {
+  font-family: "NotoSansB", "맑은 고딕", sans-serif;
+  color: #5baaff;
+  font-size: 40px;
+  margin-bottom: 20px;
+  -webkit-user-select: none;
+     -moz-user-select: none;
+      -ms-user-select: none;
+          user-select: none;
+}
+
+.container {
+  max-width: 100vw;
+  background-color: #e3ecff;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+}
+.container .header {
+  position: fixed;
+  left: 0;
+  top: 0;
+  z-index: 3;
+  display: flex;
+  background-color: #5baaff;
+  width: 100%;
+  height: 60px;
+  justify-content: flex-end;
+}
+.container .header .title {
+  color: white;
+  text-align: end;
+  line-height: 60px;
+  font-family: "NotoSansB", "맑은 고딕", sans-serif;
+  font-size: 30px;
+  margin-right: 30px;
+  cursor: pointer;
+}
+.container .side-bar {
+  position: fixed;
+  left: 0;
+  top: 0;
+  z-index: 3;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 300px;
+  left: -300px;
+  min-height: 100vh;
+  background-color: #218cff;
+  transition: all 0.3s;
+}
+.container .side-bar > ul {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  width: 100%;
+  padding: 0;
+}
+.container .side-bar > ul > li {
+  width: 100%;
+  list-style: none;
+  font-family: "NotoSansM", "맑은 고딕", sans-serif;
+  color: #cdcdcd;
+  line-height: 70px;
+  padding-left: 20px;
+}
+.container .side-bar > ul > li a,
+.container .side-bar > ul > li div {
+  display: block;
+  color: #ffffff;
+  text-decoration: none;
+  width: 180px;
+  height: 70px;
+}
+.container .side-bar > ul > li .active {
+  font-family: "NotoSansB", "맑은 고딕", sans-serif;
+  color: #ffffff;
+}
+.container .side-bar > ul > li:hover {
+  cursor: pointer;
+  background-color: #5baaff;
+}
+.container .side-bar > ul > li:hover a,
+.container .side-bar > ul > li:hover div {
+  color: white;
+}
+.container .side-bar.open {
+  transform: translateX(300px);
+  transition: all 0.3s;
+}
+.container .menuBtn {
+  z-index: 4;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 60px;
+  height: 60px;
+  padding: 0 !important;
+  margin: 0 !important;
+  align-items: center;
+  justify-content: center;
+  display: flex;
+  background-color: transparent !important;
+}
+.container .menuBtn svg {
+  fill: white;
+  width: 25px;
+  height: 25px;
+}
+.container .viewport {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background-color: #ffffff;
+  width: 80vw;
+  margin-top: 60px;
+  min-height: calc(100vh - 60px);
+  padding: 100px 30px;
+}
+.container .viewport .tweet {
+  border: 1px solid #5baaff;
+  padding: 50px;
+  border-radius: 50px;
+  margin-bottom: 30px;
+}
+.container .viewport .tweet .tweet-info {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+}
+.container .viewport .tweet .tweet-info .info-wrap {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+}
+.container .viewport .tweet .tweet-info .info-wrap .userId {
+  font-family: "NotoSansB", "맑은 고딕", sans-serif;
+  margin-right: 20px;
+}
+.container .viewport .tweet .tweet-info .tweetDate {
+  color: #aaaaaa;
+}
+.container .viewport .tweet hr {
+  margin: 20px 0;
+}
+.container .viewport .tweet .tweetContent {
+  white-space: pre-line;
+}
+.container .viewport .tweet .tweetContent > textarea {
+  resize: none;
+  width: 100%;
+  padding: 10px;
+  height: 100px;
+  border: 1px solid #5baaff;
+}
+.container .viewport .tweet .tweetContent > textarea:focus {
+  outline: none;
+}
+
+.loginForm {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  border: 2px solid #5baaff;
+  box-shadow: 1px 1px 10px #81bcff;
+  width: 400px;
+  height: 600px;
+}
+.loginForm > input[type=text],
+.loginForm input[type=password] {
+  border: 1px solid #5baaff;
+  width: 80%;
+  padding: 10px;
+  margin-bottom: 10px;
+  font-family: "NotoSansM", "맑은 고딕", sans-serif;
+  transition: all 0.2s;
+}
+.loginForm > input[type=text]:focus,
+.loginForm input[type=password]:focus {
+  transition: all 0.2s;
+  background-color: #5baaff;
+  color: white;
+}
+.loginForm > input[type=text]:focus::-moz-placeholder, .loginForm input[type=password]:focus::-moz-placeholder {
+  color: white;
+}
+.loginForm > input[type=text]:focus:-ms-input-placeholder, .loginForm input[type=password]:focus:-ms-input-placeholder {
+  color: white;
+}
+.loginForm > input[type=text]:focus::placeholder,
+.loginForm input[type=password]:focus::placeholder {
+  color: white;
+}
+.loginForm .remember_box {
+  width: 80%;
+  padding: 10px 0;
+  display: flex;
+  justify-content: space-between;
+  margin: 3px 0;
+}
+.loginForm .remember_box > label input[type=checkbox] {
+  margin-right: 5px;
+  accent-color: #81bcff;
+  border: 1px solid #81bcff;
+}
+.loginForm .remember_box > label > span {
+  font-family: "NotoSansM", "맑은 고딕", sans-serif;
+  -webkit-user-select: none;
+     -moz-user-select: none;
+      -ms-user-select: none;
+          user-select: none;
+  color: #333;
+}
+.loginForm .remember_box > span > a {
+  font-family: "NotoSansB", "맑은 고딕", sans-serif;
+  text-decoration: underline;
+  text-underline-position: under;
+  color: #81bcff;
+  cursor: pointer;
+}
+.loginForm > span {
+  width: 80%;
+  font-family: "NotoSansB", "맑은 고딕", sans-serif;
+  color: #333;
+  margin-bottom: 15px;
+}
+.loginForm > span > .highlight {
+  display: inline;
+  color: #81bcff;
+  font-family: "NotoSansB", "맑은 고딕", sans-serif;
+}
+.loginForm .loginBtn {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  width: 80%;
+  background-color: #5baaff;
+  padding: 10px;
+  font-family: "NotoSansB", "맑은 고딕", sans-serif;
+  color: white;
+  cursor: pointer;
+}
+
+.signUpForm {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 40vw;
+  height: 70vh;
+  border: 2px solid #5baaff;
+  box-shadow: 1px 1px 10px #81bcff;
+}
+.signUpForm .row-wrap .row {
+  justify-content: space-between;
+  width: 400px;
+  margin-bottom: 30px;
+}
+.signUpForm .row-wrap .row > span {
+  margin-right: 20px;
+}
+.signUpForm .row-wrap .row > span::before {
+  content: "*";
+  color: #ff3838;
+}
+.signUpForm .row-wrap .row input[type=text],
+.signUpForm .row-wrap .row input[type=password] {
+  border: 1px solid #5baaff;
+  padding: 10px;
+  width: 300px;
+  transition: all 0.2s;
+  font-family: "NotoSansM", "맑은 고딕", sans-serif;
+}
+.signUpForm .row-wrap .row input[type=text]:focus,
+.signUpForm .row-wrap .row input[type=password]:focus {
+  background-color: #5baaff;
+  color: white;
+  transition: all 0.2s;
+}
+.signUpForm .row-wrap .row input[type=text]:focus::-moz-placeholder, .signUpForm .row-wrap .row input[type=password]:focus::-moz-placeholder {
+  color: white;
+}
+.signUpForm .row-wrap .row input[type=text]:focus:-ms-input-placeholder, .signUpForm .row-wrap .row input[type=password]:focus:-ms-input-placeholder {
+  color: white;
+}
+.signUpForm .row-wrap .row input[type=text]:focus::placeholder,
+.signUpForm .row-wrap .row input[type=password]:focus::placeholder {
+  color: white;
+}
+.signUpForm .row-wrap .row .guide {
+  width: 100%;
+}
+.signUpForm .signUpBtn {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  width: 400px;
+  background-color: #5baaff;
+  padding: 5px;
+  font-family: "NotoSansB", "맑은 고딕", sans-serif;
+  color: white;
+  font-size: 25px;
+  cursor: pointer;
+}
+
+.tweet-Home {
+  width: 70%;
+}
+.tweet-Home > h1 {
+  font-size: 40px;
+}
+.tweet-Home > hr {
+  margin-bottom: 20px;
+}
+.tweet-Home > .topBar {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 30px;
+}
+.tweet-Home > .topBar > div {
+  cursor: pointer;
+  background-color: #81bcff;
+  padding: 10px;
+  border-radius: 10px;
+  color: white;
+  font-family: "NotoSansB", "맑은 고딕", sans-serif;
+}
+.tweet-Home > .topBar > div.postBtn {
+  background-color: green;
+}
+.tweet-Home > .topBar > div.cancelBtn {
+  background-color: rgb(212, 0, 0);
+}
+.tweet-Home > .topBar > select {
+  border: 2px solid #81bcff;
+  background-color: #81bcff;
+  font-family: "NotoSansB", "맑은 고딕", sans-serif;
+  color: white;
+}
+.tweet-Home .writeArea {
+  width: 100%;
+  height: 140px;
+  resize: none;
+  border: 1px solid #5baaff;
+  margin-bottom: 20px;
+  padding: 20px;
+}
+.tweet-Home .writeArea:focus {
+  outline: none;
+}
+.tweet-Home .noneList {
+  text-align: center;
+  font-family: "NotoSansB", "맑은 고딕", sans-serif;
+  font-size: 20px;
+}
+
+.userList .user {
+  width: 700px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid #5baaff;
+  padding: 30px 0;
+}
+.userList .user:last-child {
+  border-bottom: none;
+}
+.userList .user .user_id {
+  font-family: "NotoSansB", "맑은 고딕", sans-serif;
+}
+
+.userInfo {
+  width: 70%;
+}
+.userInfo .id {
+  color: #0077ff;
+}
+.userInfo hr {
+  margin: 30px 0;
+}
+.userInfo .btn {
+  margin-top: 20px;
+}
