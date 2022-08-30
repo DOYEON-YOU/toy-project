@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Header from './Common/Header';
-import { errorInfo } from 'js/common';
+import { errorInfo, enterFn } from 'js/common';
 import { signUpAPI } from 'js/API';
 
 const SignUp = () => {
@@ -9,9 +9,14 @@ const SignUp = () => {
   const [name, setName] = useState('');
   const [id, setId] = useState('');
   const [pw, setPw] = useState('');
+  const [pwChk, setPwChk] = useState('');
+  const [pwGuide, setPwGuide] = useState({
+    content: '',
+    class: '',
+  });
   const [info, setInfo] = useState('');
 
-  const navigate = useNavigate()
+  const navigate = useNavigate();
 
   useEffect(() => {
     document.title = '회원가입 | Moana Tweet';
@@ -47,13 +52,13 @@ const SignUp = () => {
         id: id,
         name: name,
         password: pw,
-        profile: info
-      }
+        profile: info,
+      };
       const result = await signUpAPI(query);
       if (typeof result === 'object') {
-        alert('회원가입이 완료 되었습니다.\n로그인 페이지로 이동합니다.')
-        return navigate('/')
-      } else return alert(errorInfo[result])
+        alert('회원가입이 완료 되었습니다.\n로그인 페이지로 이동합니다.');
+        return navigate('/');
+      } else return alert(errorInfo[result]);
     }
   };
 
@@ -70,6 +75,7 @@ const SignUp = () => {
                 type='text'
                 value={email}
                 onChange={e => setEmail(e.target.value)}
+                onKeyDown={e => enterFn(e, signUpFn)}
                 placeholder='example@example.com'
               />
             </div>
@@ -79,6 +85,7 @@ const SignUp = () => {
                 type='text'
                 value={name}
                 onChange={e => setName(e.target.value)}
+                onKeyDown={e => enterFn(e, signUpFn)}
                 placeholder='Name'
               />
             </div>
@@ -88,6 +95,7 @@ const SignUp = () => {
                 type='text'
                 value={id}
                 onChange={e => setId(e.target.value)}
+                onKeyDown={e => enterFn(e, signUpFn)}
                 placeholder='ID'
               />
             </div>
@@ -97,8 +105,35 @@ const SignUp = () => {
                 type='password'
                 value={pw}
                 onChange={e => setPw(e.target.value)}
+                onKeyDown={e => enterFn(e, signUpFn)}
                 placeholder='PW'
               />
+            </div>
+            <div className='row pwChk'>
+              <span>비밀번호 확인</span>
+              <input
+                type='password'
+                value={pwChk}
+                onChange={e => {
+                  setPwChk(e.target.value);
+                  if (e.target.value !== pw)
+                    return setPwGuide({
+                      content: '비밀번호가 일치하지 않습니다.',
+                      class: 'notSame',
+                    });
+                  else
+                    return setPwGuide({
+                      content: '비밀번호가 일치합니다.',
+                      class: 'same',
+                    });
+                }}
+                onKeyDown={e => enterFn(e, signUpFn)}
+                placeholder='PW Check'
+              />
+            </div>
+            <div className='row'>
+              <span className='notEssential'></span>
+              <div className={pwGuide.class}>{pwGuide.content}</div>
             </div>
             <div className='row'>
               <span>한줄소개</span>
@@ -106,6 +141,7 @@ const SignUp = () => {
                 type='text'
                 value={info}
                 onChange={e => setInfo(e.target.value)}
+                onKeyDown={e => enterFn(e, signUpFn)}
                 placeholder='Introduce yourself...'
               />
             </div>

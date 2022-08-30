@@ -1,6 +1,5 @@
 import { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import $ from 'jquery';
 import { setCookie, getCookie } from 'js/cookie';
 import { loginAPI } from 'js/API';
 import { errorInfo, enterFn } from 'js/common';
@@ -22,7 +21,10 @@ const SignIn = () => {
   useEffect(() => {
     document.title = '로그인 | Moana Tweet';
     if (getCookie('myToken')) navigate('/home');
-    $('.idInput').focus();
+    if (localStorage.getItem('save-id')) {
+      setId(localStorage.getItem('save-id'));
+      setCheck(true);
+    }
   }, []);
 
   const checkForm = async (str, bool) => {
@@ -38,14 +40,13 @@ const SignIn = () => {
     else checkForm(obj);
     const result = await loginAPI(id, pw);
     if (typeof result === 'object') {
+      console.log(result);
       const { access_token } = result?.data;
       setCookie('myToken', access_token, {
         path: '/',
       });
-      // window.localStorage.setItem('myId', id)
-      setCookie('myId', id, {
-        path: '/'
-      })
+      localStorage.setItem('myId', id);
+      localStorage.setItem('myPw', pw);
       if (check === true) {
         localStorage.setItem('save-id', id);
       } else localStorage.removeItem('save-id');
@@ -63,6 +64,7 @@ const SignIn = () => {
             type='text'
             placeholder='ID'
             className='idInput'
+            autoFocus
             value={id}
             onChange={e => setId(e.target.value)}
             onKeyDown={e => enterFn(e, loginFn)}
@@ -86,7 +88,7 @@ const SignIn = () => {
               <span>아이디 저장</span>
             </label>
             <span>
-              <Link to={'/signup'}>회원가입</Link>
+              <Link to={'/sign-up'}>회원가입</Link>
             </span>
           </div>
           {formCheck.emptyBoth && (

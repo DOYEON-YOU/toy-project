@@ -33,10 +33,12 @@ const UserList = () => {
           {acc}
           <div className='user'>
             <div>
-              <Link to={`/${user_id}`} className='user_id'>@{user_id}</Link>
+              <Link to={`/${user_id}`} className='user_id'>
+                @{user_id}
+              </Link>
               <div>{profile}</div>
             </div>
-            {getCookie('myId') !== user_id && (
+            {localStorage.getItem('myId') !== user_id && (
               <div
                 className={`btn ${follow_chk ? 'unFollow' : 'follow'}`}
                 onClick={() => {

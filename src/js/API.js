@@ -1,11 +1,8 @@
 import axios from 'axios';
-import { getCookie } from './cookie';
 
 const headers = {
   'Content-Type': 'application/json',
 };
-
-const myId = getCookie('myId');
 
 const errorHandling = error => {
   const status = error?.response?.status;
@@ -37,7 +34,9 @@ export const signUpAPI = async query => {
 
 export const getUserAPI = async () => {
   try {
-    return await axios.get(`/api/user_list?user_id=${myId}`);
+    return await axios.get(
+      `/api/user_list?user_id=${localStorage.getItem('myId')}`
+    );
   } catch (error) {
     return errorHandling(error);
   }
@@ -46,7 +45,7 @@ export const getUserAPI = async () => {
 export const getTweetAPI = async (target, other_user_id) => {
   try {
     return await axios.get(
-      `/api/timeline?target=${target}&user_id=${myId}${
+      `/api/timeline?target=${target}&user_id=${localStorage.getItem('myId')}${
         target === 'other_user' ? `&other_user_id=${other_user_id}` : ''
       }`
     );
@@ -57,7 +56,9 @@ export const getTweetAPI = async (target, other_user_id) => {
 
 export const newTweetAPI = async tweet => {
   try {
-    return await axios.post(`/api/tweet?user_id=${myId}&tweet=${tweet}`);
+    return await axios.post(
+      `/api/tweet?user_id=${localStorage.getItem('myId')}&tweet=${tweet}`
+    );
   } catch (error) {
     return errorHandling(error);
   }
@@ -65,7 +66,9 @@ export const newTweetAPI = async tweet => {
 
 export const followAPI = async target => {
   try {
-    return await axios.post(`/api/follow?user_id=${myId}&follow_id=${target}`);
+    return await axios.post(
+      `/api/follow?user_id=${localStorage.getItem('myId')}&follow_id=${target}`
+    );
   } catch (error) {
     return errorHandling(error);
   }
@@ -74,7 +77,9 @@ export const followAPI = async target => {
 export const unFollowAPI = async target => {
   try {
     return await axios.post(
-      `/api/unfollow?user_id=${myId}&unfollow_id=${target}`
+      `/api/unfollow?user_id=${localStorage.getItem(
+        'myId'
+      )}&unfollow_id=${target}`
     );
   } catch (error) {
     return errorHandling(error);
@@ -84,7 +89,9 @@ export const unFollowAPI = async target => {
 export const updateTweetAPI = async (tweet_id, update_tweet) => {
   try {
     return await axios.post(
-      `/api/tweet_update?user_id=${myId}&tweet_id=${tweet_id}&update_tweet=${update_tweet}`
+      `/api/tweet_update?user_id=${localStorage.getItem(
+        'myId'
+      )}&tweet_id=${tweet_id}&update_tweet=${update_tweet}`
     );
   } catch (error) {
     return errorHandling(error);
@@ -93,8 +100,12 @@ export const updateTweetAPI = async (tweet_id, update_tweet) => {
 
 export const deleteTweetAPI = async tweet_id => {
   try {
-    return await axios.post(`/api/tweet_delete?user_id=${myId}&tweet_id=${tweet_id}`)
-  } catch(error) {
-    return errorHandling(error)
+    return await axios.post(
+      `/api/tweet_delete?user_id=${localStorage.getItem(
+        'myId'
+      )}&tweet_id=${tweet_id}`
+    );
+  } catch (error) {
+    return errorHandling(error);
   }
-}
+};

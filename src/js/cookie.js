@@ -1,4 +1,4 @@
-import Cookies from "universal-cookie";
+import Cookies from 'universal-cookie';
 
 const cookies = new Cookies();
 
@@ -8,6 +8,6 @@ export const setCookie = (name, value, option) => {
 export const getCookie = name => {
   return cookies.get(name);
 };
-export const removeCookie = name => {
-  return cookies.remove(name);
+export const removeCookie = (name, option) => {
+  return cookies.remove(name, { ...option });
 };

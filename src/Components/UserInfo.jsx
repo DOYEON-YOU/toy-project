@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import Header from './Common/Header';
 import SideBar from './Common/SideBar';
 import {
@@ -19,6 +19,7 @@ const UserInfo = () => {
   const [tweets, setTweets] = useState([]);
   const [followChk, setFollowChk] = useState('');
 
+  const navigate = useNavigate();
   const path = useLocation().pathname.replaceAll('/', '');
   let prevent = false;
 
@@ -34,7 +35,7 @@ const UserInfo = () => {
       prevent = false;
     }, 200);
 
-    if (path === getCookie('myId')) {
+    if (path === localStorage.getItem('myId')) {
       const tweetData = await getTweetAPI('my');
       if (typeof tweetData === 'object') {
         setTweets(tweetData.data);
@@ -86,7 +87,7 @@ const UserInfo = () => {
             <div className='tweet-info'>
               <div className='info-wrap'>
                 <div className='userId'>@{user_id}</div>
-                {getCookie('myId') === user_id &&
+                {localStorage.getItem('myId') === user_id &&
                   (id === editIdx && edit ? (
                     <>
                       <div className='btn editEnd' onClick={() => editTweet()}>
@@ -148,8 +149,10 @@ const UserInfo = () => {
         <div className='userInfo'>
           <h1 className='id'>@{path}</h1>
           <div className='profile'>{profile}</div>
-          {path === getCookie('myId') ? (
-            ''
+          {path === localStorage.getItem('myId') ? (
+            <div className='btn' onClick={() => navigate('/edit')}>
+              회원 정보 수정
+            </div>
           ) : (
             <div
               className={`btn ${followChk ? 'unFollow' : 'follow'}`}

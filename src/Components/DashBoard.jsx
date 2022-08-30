@@ -42,7 +42,11 @@ const DashBoard = () => {
   };
 
   const newTweet = async () => {
-    if (edit) return alert('수정 중에는 글을 게시할 수 없습니다.')
+    if (edit) return alert('수정 중에는 글을 게시할 수 없습니다.');
+    if (!content) return alert('게시할 글의 내용을 적어 주세요.');
+    if (content.length > 1000) {
+      return alert('공백 포함 1000자까지 게시 가능합니다.');
+    }
     const result = await newTweetAPI(content);
     if (typeof result === 'object') {
       getTweet();
@@ -53,8 +57,8 @@ const DashBoard = () => {
 
   const editTweet = async () => {
     if (write) {
-      setEdit(false)
-      return alert('글을 작성하는 중에는 수정할 수 없습니다.')
+      setEdit(false);
+      return alert('글을 작성하는 중에는 수정할 수 없습니다.');
     }
     const result = await updateTweetAPI(editIdx, content);
     if (typeof result === 'object') {
@@ -74,6 +78,14 @@ const DashBoard = () => {
     } else return alert(errorInfo[result]);
   };
 
+  const writeTweet = e => {
+    setContent(e.target.value);
+    if (e.target.value.length > 1000) {
+      const txt = e.target.value.substr(0, 1000);
+      setContent(txt);
+    }
+  };
+
   const renderTweet = () => {
     if (list.length >= 1) {
       return list.reduce(
@@ -87,7 +99,7 @@ const DashBoard = () => {
                     <Link to={`/${user_id}`} className='userId'>
                       @{user_id}
                     </Link>
-                    {getCookie('myId') === user_id ? (
+                    {localStorage.getItem('myId') === user_id ? (
                       id === editIdx && edit ? (
                         <>
                           <div
@@ -195,10 +207,17 @@ const DashBoard = () => {
                 <div className='postBtn' onClick={() => newTweet()}>
                   게시
                 </div>
-                <div className='cancelBtn' onClick={() => {
-                  setWrite(false)
-                  setContent('')
-                }}>
+                <div className={`calc ${content.length === 1000 ? 'red' : ''}`}>
+                  {content.length === 1000
+                    ? '입력 불가'
+                    : `입력 가능: ${1000 - content.length}자`}
+                </div>
+                <div
+                  className='cancelBtn'
+                  onClick={() => {
+                    setWrite(false);
+                    setContent('');
+                  }}>
                   취소
                 </div>
               </>
@@ -217,7 +236,7 @@ const DashBoard = () => {
             <textarea
               autoFocus
               className='writeArea'
-              onChange={e => setContent(e.target.value)}
+              onChange={e => writeTweet(e)}
               value={content}
               onKeyDown={e => enterFn(e, newTweet)}></textarea>
           )}

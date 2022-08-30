@@ -1,8 +1,8 @@
 import { useState, useEffect } from 'react';
 import { RiMenu4Fill } from 'react-icons/ri';
+import { removeCookie, getCookie } from 'js/cookie';
 import { logout } from 'js/common';
 import { useNavigate, Link, useLocation } from 'react-router-dom';
-import { getCookie } from 'js/cookie';
 
 const SideBar = () => {
   const path = useLocation().pathname;
@@ -37,13 +37,22 @@ const SideBar = () => {
           </li>
           <li>
             <Link
-              to={`/${getCookie('myId')}`}
-              className={path === `/${getCookie('myId')}` && 'active'}>
+              to={`/${localStorage.getItem('myId')}`}
+              className={
+                path === `/${localStorage.getItem('myId')}` && 'active'
+              }>
               마이페이지
             </Link>
           </li>
           <li>
-            <div onClick={() => logout(navigate)}>로그아웃</div>
+            <div
+              onClick={() => {
+                localStorage.removeItem('myId');
+                removeCookie('myToken', { path: '/' });
+                navigate('/');
+              }}>
+              로그아웃
+            </div>
           </li>
         </ul>
       </div>
