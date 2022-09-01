@@ -7,6 +7,9 @@ body,
   color: $fontColor;
   font-size: 16px;
 }
+a {
+  text-decoration: none;
+}
 .row {
   @include flex-style;
 }
@@ -20,7 +23,6 @@ body,
   @include flex-style();
   height: 50px;
   justify-content: flex-start;
-  text-decoration: none;
   font-family: $boldFont;
 }
 .userImg {
@@ -35,21 +37,46 @@ body,
   height: 150px;
   border-radius: 150px;
 }
+.calc {
+  font-family: $boldFont;
+  background-color: transparent;
+  color: $mainColor;
+  &.red {
+    color: $highlight_red;
+  }
+}
+
+input[type='text'],
+input[type='password'] {
+  box-shadow: 1px 1px 4px $subColor01;
+  padding: 10px;
+  width: 20vw;
+  transition: all 0.2s;
+  font-family: $middleFont;
+  &:focus {
+    background-color: $mainColor;
+    color: white;
+    transition: all 0.2s;
+    &::placeholder {
+      color: white;
+    }
+  }
+}
 .btn {
   @include flex-style();
+  @include btnShadow($subColor01);
   font-family: $boldFont;
   cursor: pointer;
   padding: 10px;
-  background-color: gray;
   border-radius: 10px;
   margin-right: 10px;
   color: white;
   transition: all 0.3s;
   background-color: $subColor01;
   &:hover {
+    transition: all 0.3s;
     background-color: $subColor02;
   }
-
   &.loginBtn {
     width: 70%;
   }
@@ -57,45 +84,48 @@ body,
     width: 400px;
     margin-top: 40px;
   }
-  &.postBtn {
-    background-color: green;
-  }
-  &.cancelBtn {
-    background-color: rgb(212, 0, 0);
-  }
   &.save {
     margin-top: 30px;
   }
   &.unFollow,
   &.edit {
-    transition: all 0.3s;
+    @include btnShadow($gray03);
     background-color: $gray03;
     &:hover {
-      transition: all 0.3s;
+      @include btnShadow($gray02);
       background-color: $gray02;
     }
   }
   &.follow,
-  &.editEnd {
-    transition: all 0.3s;
+  &.editEnd,
+  &.postBtn {
+    @include btnShadow(green);
     background-color: green;
     &:hover {
-      transition: all 0.3s;
+      @include btnShadow(rgb(0, 81, 0));
       background-color: rgb(0, 81, 0);
     }
   }
   &.del,
   &.cancel {
-    transition: all 0.3s;
+    @include btnShadow(rgb(212, 0, 0));
     background-color: rgb(212, 0, 0);
     &:hover {
-      transition: all 0.3s;
+      @include btnShadow(rgb(164, 0, 0));
       background-color: rgb(164, 0, 0);
     }
   }
   &.imgDelete {
-    width: 400px;
     margin-top: 10px;
+  }
+  &.resign {
+    margin-top: 10px;
+    @include btnShadow(rgb(212, 0, 0));
+    background-color: rgb(212, 0, 0) !important;
+    &:hover {
+      @include btnShadow(rgb(164, 0, 0));
+      background-color: rgb(164, 0, 0) !important;
+    }
   }
 }
 h1 {
@@ -123,22 +153,6 @@ h1 {
         &.notEssential {
           &::before {
             content: '';
-          }
-        }
-      }
-      input[type='text'],
-      input[type='password'] {
-        border: 1px solid $mainColor;
-        padding: 10px;
-        width: 15vw;
-        transition: all 0.2s;
-        font-family: $middleFont;
-        &:focus {
-          background-color: $mainColor;
-          color: white;
-          transition: all 0.2s;
-          &::placeholder {
-            color: white;
           }
         }
       }
@@ -177,7 +191,29 @@ h1 {
     background-color: $mainColor;
     width: 100%;
     height: 60px;
-    justify-content: flex-end;
+    justify-content: space-between;
+    > div {
+      @include flex-style();
+      // margin-left: 20px;
+      > .link {
+        padding: 0 30px;
+        height: 100%;
+        line-height: 60px;
+        cursor: pointer;
+        color: white;
+        font-family: $boldFont;
+        transition: all 0.3s;
+        div {
+          color: white;
+          font-family: $boldFont;
+        }
+        &:hover {
+          transition: all 0.3s;
+          background-color: $subColor02;
+        }
+      }
+
+    }
     .title {
       color: white;
       text-align: end;
@@ -188,81 +224,17 @@ h1 {
       cursor: pointer;
     }
   }
-  .side-bar {
-    @include position-style(fixed, $zIndex: 3);
-    @include flex-style(column);
-    width: 300px;
-    left: -300px;
-    min-height: 100vh;
-    background-color: $sideBarColor;
-    transition: all 0.3s;
-    > ul {
-      @include flex-style(column);
-      height: 100vh;
-      width: 100%;
-      padding: 0;
-      > li {
-        width: 100%;
-        list-style: none;
-        font-family: $middleFont;
-        color: $borderColor;
-        line-height: 70px;
-        padding-left: 20px;
-        a,
-        div {
-          display: block;
-          color: $white;
-          text-decoration: none;
-          width: 180px;
-          height: 70px;
-        }
-        .active {
-          font-family: $boldFont;
-          color: $white;
-        }
-        &:hover {
-          cursor: pointer;
-          background-color: $mainColor;
-          a,
-          div {
-            color: white;
-          }
-        }
-      }
-    }
-    &.open {
-      transform: translateX(300px);
-      transition: all 0.3s;
-    }
-  }
-  .menuBtn {
-    z-index: 4;
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 60px;
-    height: 60px;
-    padding: 0 !important;
-    margin: 0 !important;
-    align-items: center;
-    justify-content: center;
-    display: flex;
-    background-color: transparent !important;
-    svg {
-      fill: white;
-      width: 25px;
-      height: 25px;
-    }
-  }
   .viewport {
     @include flex-style(column);
+    box-shadow: 1px 2px 10px $subColor01;
     background-color: $white;
     width: 80vw;
     margin-top: 60px;
     min-height: calc(100vh - 60px);
     padding: 100px 30px;
     .tweet {
-      border: 1px solid $mainColor;
+      cursor: pointer;
+      box-shadow: 1px 2px 10px $subColor01;
       padding: 50px;
       border-radius: 50px;
       margin-bottom: 30px;
@@ -301,26 +273,13 @@ h1 {
 }
 .loginForm {
   @include flex-style(column);
-  border: 2px solid $mainColor;
-  box-shadow: 1px 1px 10px $subColor01;
+  box-shadow: 1px 2px 10px $subColor01;
   width: 400px;
   height: 600px;
   > input[type='text'],
   input[type='password'] {
-    border: 1px solid $mainColor;
     width: 80%;
-    padding: 10px;
     margin-bottom: 10px;
-    font-family: $middleFont;
-    transition: all 0.2s;
-    &:focus {
-      transition: all 0.2s;
-      background-color: $mainColor;
-      color: white;
-      &::placeholder {
-        color: white;
-      }
-    }
   }
   .remember_box {
     width: 80%;
@@ -364,8 +323,7 @@ h1 {
 .signUpForm {
   @include flex-style(column);
   padding: 30px;
-  border: 2px solid $mainColor;
-  box-shadow: 1px 1px 10px $subColor01;
+  box-shadow: 1px 2px 10px $subColor01;
 }
 .tweet-Home {
   width: 70%;
@@ -375,22 +333,9 @@ h1 {
   > hr {
     margin-bottom: 20px;
   }
-  .profile {
-    margin-right: 30px;
-  }
   > .topBar {
     @include flex-style($justifyVal: space-between);
     margin-bottom: 30px;
-    > div {
-      &.calc {
-        font-family: $boldFont;
-        background-color: transparent;
-        color: $mainColor;
-        &.red {
-          color: $highlight_red;
-        }
-      }
-    }
     > select {
       border: 2px solid $subColor01;
       background-color: $subColor01;
@@ -427,7 +372,6 @@ h1 {
     }
     .user_id {
       line-height: 30px;
-      text-decoration: none;
       font-family: $boldFont;
     }
   }
@@ -448,6 +392,8 @@ h1 {
 
 .userInfo-edit {
   @include flex-style(column);
+  box-shadow: 1px 2px 10px $subColor01;
+  padding: 30px;
   .row > span {
     &::before {
       content: '';
@@ -461,6 +407,95 @@ h1 {
     }
     &.save {
       margin-top: 30px;
+    }
+  }
+}
+
+.tweetInfo {
+  @include flex-style(column);
+  width: 70%;
+  .profileInfo {
+    @include flex-style(column);
+    cursor: pointer;
+    > h1 {
+      margin-top: 10px;
+    }
+    > span {
+      color: $subFontColor;
+      margin-bottom: 20px
+    }
+  }
+  .btns {
+    @include flex-style();
+  }
+  .btn {
+    width: 250px;
+    margin: 5px;
+  }
+  .content {
+    @include flex-style(column);
+    box-shadow: 1px 2px 10px $subColor01;
+    margin-top: 30px;
+    width: 100%;
+    padding: 25px;
+    > .contentArea {
+      width: 100%;
+      height: 280px;
+      border: none;
+      resize: none;
+      &:focus {
+        outline: none;
+      }
+    }
+    > .calc {
+      width: 100%;
+      text-align: right;
+    }
+    > hr {
+      margin: 15px 0;
+      width: 100%;
+    }
+    > .commentArea {
+      width: 100%;
+      max-height: 300px;
+      overflow-y: auto;
+      > .comment {
+        @include flex-style();
+        margin-bottom: 20px;
+        >.commentContent {
+          margin-left: 30px;
+        }
+        >.profile {
+          cursor: pointer;
+          > div {
+            font-family: $middleFont;
+          }
+        }
+      }
+    }
+    >.commentInput {
+      @include flex-style();
+      width: 100%;
+      height: 70px;
+      > textarea {
+        height: 100%;
+        resize: none;
+        border: 1px solid $mainColor;
+        width: 90%;
+        padding: 10px;
+        &:focus {
+          outline: none
+        }
+      }
+      > div {
+        @include flex-style();
+        width: 10%;
+        background-color: $mainColor;
+        height: 100%;
+        cursor: pointer;
+        font-family: $boldFont;
+        color: white;
+      }
     }
   }
 }

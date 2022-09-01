@@ -2,9 +2,9 @@ import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import defaultUserImg from 'Image/user.png';
 import Header from './Common/Header';
-import SideBar from './Common/SideBar';
-import { getUserAPI, editUserInfoAPI } from 'js/API';
-import { readImage, changeState, errorInfo } from 'js/common';
+import { getUserAPI, editUserInfoAPI, resignAPI } from 'js/API';
+import { enterFn, readImage, changeState, checkForm } from 'js/common';
+import { errorInfo, guideInfo } from 'js/array';
 
 const UserEdit = () => {
   const [user, setUser] = useState({
@@ -17,10 +17,7 @@ const UserEdit = () => {
     img: '',
   });
   const [newPwChk, setNewPwChk] = useState('');
-  const [newPwGuide, setNewPwGuide] = useState({
-    content: '',
-    className: '',
-  });
+  const [newPwGuide, setNewPwGuide] = useState(guideInfo.default);
   const navigate = useNavigate();
   let prevent = false;
 
@@ -52,16 +49,27 @@ const UserEdit = () => {
   };
 
   const editUserInfo = async () => {
-    if (user.password === '')
-      return alert('프로필을 수정하시려면 기존 비밀번호를 입력해 주세요.');
-    else if (user.new_password && newPwChk === '')
-      return alert('비밀번호를 변경하시려면 새 비밀번호 확인이 필요합니다.');
-    else {
+    if (checkForm('edit', user, setUser, newPwChk, setNewPwChk, newPwGuide)) {
       if (!window.confirm('회원 정보를 수정하시겠습니까?')) return;
       const result = await editUserInfoAPI(user);
       if (typeof result === 'object') {
         alert('회원 정보가 수정되었습니다.');
         navigate(`/${sessionStorage.getItem('myId')}`);
+      } else return alert(errorInfo[result]);
+    } else return;
+  };
+
+  const resign = async () => {
+    if (user.password.trim() === '')
+      return alert('회원 탈퇴를 진행하시려면 기존 비밀번호를 입력해 주세요.');
+    if (!window.confirm('정말 탈퇴하시겠습니까?')) return;
+    else {
+      const result = await resignAPI(user.password);
+      if (typeof result === 'object') {
+        sessionStorage.clear();
+        localStorage.clear();
+        navigate('/');
+        return alert('탈퇴가 완료되었습니다.');
       } else return alert(errorInfo[result]);
     }
   };
@@ -69,7 +77,6 @@ const UserEdit = () => {
   return (
     <div className='container'>
       <Header />
-      <SideBar />
       <div className='viewport'>
         <div className='userInfo-edit'>
           <div className='edit-wrap'>
@@ -83,13 +90,16 @@ const UserEdit = () => {
                 accept='image/*'
                 onChange={e => readImage(e.target.files[0], setUser)}
               />
-              <label htmlFor='imgUploader' className='btn edit'>
+              <label htmlFor='imgUploader' className='btn profileEdit'>
                 프로필 사진 업로드
               </label>
               <div
                 className='btn imgDelete'
                 onClick={() => changeState(setUser, 'img', defaultUserImg)}>
                 프로필 사진 삭제
+              </div>
+              <div className='btn resign' onClick={() => resign()}>
+                회원 탈퇴
               </div>
             </div>
             <div className='row-wrap'>
@@ -99,6 +109,7 @@ const UserEdit = () => {
                   type='text'
                   value={user.email}
                   onChange={e => changeState(setUser, 'email', e.target.value)}
+                  onKeyDown={e => enterFn(e, editUserInfo)}
                   placeholder='이메일'
                 />
               </div>
@@ -108,6 +119,7 @@ const UserEdit = () => {
                   type='text'
                   value={user.name}
                   onChange={e => changeState(setUser, 'name', e.target.value)}
+                  onKeyDown={e => enterFn(e, editUserInfo)}
                   placeholder='닉네임'
                 />
               </div>
@@ -119,6 +131,7 @@ const UserEdit = () => {
                   onChange={e =>
                     changeState(setUser, 'password', e.target.value)
                   }
+                  onKeyDown={e => enterFn(e, editUserInfo)}
                   placeholder='기존 비밀번호'
                 />
               </div>
@@ -130,16 +143,14 @@ const UserEdit = () => {
                   onChange={e => {
                     changeState(setUser, 'new_password', e.target.value);
                     if (newPwChk !== e.target.value)
-                      setNewPwGuide({
-                        content: '비밀번호가 일치하지 않습니다.',
-                        className: 'notSame',
-                      });
-                    else
-                      setNewPwGuide({
-                        content: '비밀번호가 일치합니다.',
-                        className: 'same',
-                      });
+                      setNewPwGuide(guideInfo.notSame);
+                    else {
+                      if (e.target.value.trim() === '')
+                        setNewPwGuide(guideInfo.empty);
+                      else setNewPwGuide(guideInfo.same);
+                    }
                   }}
+                  onKeyDown={e => enterFn(e, editUserInfo)}
                   placeholder='새 비밀번호'
                 />
               </div>
@@ -151,16 +162,14 @@ const UserEdit = () => {
                   onChange={e => {
                     setNewPwChk(e.target.value);
                     if (user.new_password !== e.target.value)
-                      setNewPwGuide({
-                        content: '비밀번호가 일치하지 않습니다.',
-                        className: 'notSame',
-                      });
-                    else
-                      setNewPwGuide({
-                        content: '비밀번호가 일치합니다.',
-                        className: 'same',
-                      });
+                      setNewPwGuide(guideInfo.notSame);
+                    else {
+                      if (e.target.value.trim() === '')
+                        setNewPwGuide(guideInfo.empty);
+                      else setNewPwGuide(guideInfo.same);
+                    }
                   }}
+                  onKeyDown={e => enterFn(e, editUserInfo)}
                   placeholder='새 비밀번호 확인'
                 />
               </div>

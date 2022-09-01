@@ -11,8 +11,9 @@ $gray02: #545454;
 $gray03: #878787;
 $gray04: #aaaaaa;
 $borderColor: #cdcdcd;
-$backgroundColor: #e3ecff;
+$backgroundColor: #e3eaff;
 $white: #ffffff;
+
 
 //---------------폰트 변수 정리---------------
 $boldFont: 'NotoSansB', '맑은 고딕', sans-serif;
@@ -34,4 +35,8 @@ $thinFont: 'NotoSansT', '맑은 고딕', sans-serif;
   left: $left;
   top: $top;
   z-index: $zIndex;
+}
+
+@mixin btnShadow($color) {
+  box-shadow: 1px 1px 3px $color;
 }

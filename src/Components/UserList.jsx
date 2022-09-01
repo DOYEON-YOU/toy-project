@@ -1,9 +1,9 @@
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import Header from './Common/Header';
-import SideBar from './Common/SideBar';
 import { getUserAPI } from 'js/API';
-import { errorInfo, follow, unFollow } from 'js/common';
+import { errorInfo } from 'js/array';
+import { follow, unFollow } from 'js/common';
 
 const UserList = () => {
   const [list, setList] = useState([]);
@@ -63,7 +63,6 @@ const UserList = () => {
   return (
     <div className='container'>
       <Header />
-      <SideBar />
       <div className='viewport'>
         <div className='userList'>
           <h1>User List</h1>

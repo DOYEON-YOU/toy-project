@@ -2,7 +2,8 @@ import { useState, useEffect } from 'react';
 import defaultUserImg from 'Image/user.png';
 import { useNavigate } from 'react-router-dom';
 import Header from './Common/Header';
-import { errorInfo, enterFn, readImage, changeState } from 'js/common';
+import { errorInfo, guideInfo } from 'js/array';
+import { enterFn, readImage, changeState, checkForm } from 'js/common';
 import { signUpAPI } from 'js/API';
 
 const SignUp = () => {
@@ -15,10 +16,7 @@ const SignUp = () => {
     img: defaultUserImg,
   });
   const [pwChk, setPwChk] = useState('');
-  const [pwGuide, setPwGuide] = useState({
-    content: '',
-    className: '',
-  });
+  const [pwGuide, setPwGuide] = useState(guideInfo.default);
 
   const navigate = useNavigate();
 
@@ -27,44 +25,13 @@ const SignUp = () => {
   }, []);
 
   const signUpFn = async () => {
-    const emailRegExp = /^([a-z0-9_\.-]+)@([\da-z\.-]+)\.([a-z\.]{2,6})$/;
-    const idRegExp = /^[a-zA-Z0-9]*$/;
-    const pwRegExp = /^[A-Za-z0-9]{6,12}$/;
-
-    if (!emailRegExp.test(user.email) || user.email.trim() === '')
-      return alert('이메일을 정확히 입력해 주세요.');
-    else if (user.name.trim() === '') return alert('이름을 입력해 주세요.');
-    else if (user.id.trim() === '') return alert('아이디를 입력해 주세요.');
-    else if (!idRegExp.test(user.id)) {
-      changeState(setUser, 'id', '');
-      return alert('아이디는 영문(대소문자)와 숫자만 사용 가능합니다.');
-    } else if (user.password.trim() === '') return alert('비밀번호를 입력해 주세요.');
-    // else if (!pwRegExp.test(user.password)) {
-    //   changeState(setUser, 'pw', '');
-    //   return alert(
-    //     '비밀번호는 숫자와 영문 포함 6~12자리 이내만 사용 가능합니다.'
-    //   );
-    // } 
-    else if (user.profile.trim() === '')
-      return alert('한줄소개를 입력해 주세요.');
-    else if (user.profile.length < 5)
-      return alert('한줄소개는 최소 5글자 이상 입력해 주세요.');
-    else if (user.profile.length > 30) {
-      changeState(
-        setUser,
-        'profile',
-        user.profile.slice(0, -(user.profile.length - 30))
-      );
-      return alert('한줄소개는 최대 30글자까지 입력 가능합니다.');
-    } else {
-      console.log(user)
+    if (checkForm('signUp', user, setUser, pwChk, setPwChk, pwGuide)) {
       const result = await signUpAPI(user);
-      console.log(result)
       if (typeof result === 'object') {
         alert('회원가입이 완료 되었습니다.\n로그인 페이지로 이동합니다.');
         return navigate('/');
       } else return alert(errorInfo[result]);
-    }
+    } else return;
   };
 
   return (
@@ -132,16 +99,12 @@ const SignUp = () => {
                   value={user.password}
                   onChange={e => {
                     changeState(setUser, 'password', e.target.value);
-                    if (pwChk !== e.target.value)
-                      return setPwGuide({
-                        content: '비밀번호가 일치하지 않습니다.',
-                        className: 'notSame',
-                      });
-                    else
-                      return setPwGuide({
-                        content: '비밀번호가 일치합니다.',
-                        className: 'same',
-                      });
+                    if (pwChk !== e.target.value) setPwGuide(guideInfo.notSame);
+                    else {
+                      if (e.target.value.trim() === '')
+                        setPwGuide(guideInfo.empty);
+                      else setPwGuide(guideInfo.same);
+                    }
                   }}
                   onKeyDown={e => enterFn(e, signUpFn)}
                   placeholder='PW'
@@ -155,15 +118,12 @@ const SignUp = () => {
                   onChange={e => {
                     setPwChk(e.target.value);
                     if (user.password !== e.target.value)
-                      return setPwGuide({
-                        content: '비밀번호가 일치하지 않습니다.',
-                        className: 'notSame',
-                      });
-                    else
-                      return setPwGuide({
-                        content: '비밀번호가 일치합니다.',
-                        className: 'same',
-                      });
+                      setPwGuide(guideInfo.notSame);
+                    else {
+                      if (e.target.value.trim() === '')
+                        setPwGuide(guideInfo.empty);
+                      else setPwGuide(guideInfo.same);
+                    }
                   }}
                   onKeyDown={e => enterFn(e, signUpFn)}
                   placeholder='PW Check'

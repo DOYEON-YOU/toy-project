@@ -6,6 +6,7 @@ import DashBoard from 'Components/DashBoard';
 import UserList from 'Components/UserList';
 import UserInfo from 'Components/UserInfo';
 import UserEdit from 'Components/UserEdit';
+import TweetInfo from 'Components/TweetInfo';
 
 function App() {
   return (
@@ -17,6 +18,7 @@ function App() {
         <Route path='/user-list' element={<UserList />} />
         <Route path='/:id' element={<UserInfo />} />
         <Route path='/edit' element={<UserEdit />} />
+        <Route path='/tweet/:id' element={<TweetInfo />} />
       </Routes>
     </div>
   );

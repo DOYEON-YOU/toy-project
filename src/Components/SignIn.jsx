@@ -1,8 +1,9 @@
 import { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { loginAPI } from 'js/API';
-import { errorInfo, enterFn } from 'js/common';
 import Header from './Common/Header';
+import { signInAPI } from 'js/API';
+import { enterFn } from 'js/common';
+import { errorInfo } from 'js/array';
 
 const SignIn = () => {
   const [id, setId] = useState('');
@@ -37,7 +38,7 @@ const SignIn = () => {
     else if (id.trim() === '') return checkForm('emptyId', true);
     else if (pw.trim() === '') return checkForm('emptyPw', true);
     else checkForm(obj);
-    const result = await loginAPI(id, pw);
+    const result = await signInAPI(id, pw);
     if (result === null) return;
     if (typeof result === 'object') {
       const { access_token } = result?.data;

@@ -7,6 +7,10 @@ body,
   font-size: 16px;
 }
 
+a {
+  text-decoration: none;
+}
+
 .row {
   display: flex;
   flex-direction: row;
@@ -32,7 +36,6 @@ body,
   justify-content: center;
   height: 50px;
   justify-content: flex-start;
-  text-decoration: none;
   font-family: "NotoSansB", "맑은 고딕", sans-serif;
 }
 
@@ -50,15 +53,49 @@ body,
   border-radius: 150px;
 }
 
+.calc {
+  font-family: "NotoSansB", "맑은 고딕", sans-serif;
+  background-color: transparent;
+  color: #5baaff;
+}
+.calc.red {
+  color: #ff3838;
+}
+
+input[type=text],
+input[type=password] {
+  box-shadow: 1px 1px 4px #81bcff;
+  padding: 10px;
+  width: 20vw;
+  transition: all 0.2s;
+  font-family: "NotoSansM", "맑은 고딕", sans-serif;
+}
+input[type=text]:focus,
+input[type=password]:focus {
+  background-color: #5baaff;
+  color: white;
+  transition: all 0.2s;
+}
+input[type=text]:focus::-moz-placeholder, input[type=password]:focus::-moz-placeholder {
+  color: white;
+}
+input[type=text]:focus:-ms-input-placeholder, input[type=password]:focus:-ms-input-placeholder {
+  color: white;
+}
+input[type=text]:focus::placeholder,
+input[type=password]:focus::placeholder {
+  color: white;
+}
+
 .btn {
   display: flex;
   flex-direction: row;
   align-items: center;
   justify-content: center;
+  box-shadow: 1px 1px 3px #81bcff;
   font-family: "NotoSansB", "맑은 고딕", sans-serif;
   cursor: pointer;
   padding: 10px;
-  background-color: gray;
   border-radius: 10px;
   margin-right: 10px;
   color: white;
@@ -66,6 +103,7 @@ body,
   background-color: #81bcff;
 }
 .btn:hover {
+  transition: all 0.3s;
   background-color: #0077ff;
 }
 .btn.loginBtn {
@@ -75,42 +113,44 @@ body,
   width: 400px;
   margin-top: 40px;
 }
-.btn.postBtn {
-  background-color: green;
-}
-.btn.cancelBtn {
-  background-color: rgb(212, 0, 0);
-}
 .btn.save {
   margin-top: 30px;
 }
 .btn.unFollow, .btn.edit {
-  transition: all 0.3s;
+  box-shadow: 1px 1px 3px #878787;
   background-color: #878787;
 }
 .btn.unFollow:hover, .btn.edit:hover {
-  transition: all 0.3s;
+  box-shadow: 1px 1px 3px #545454;
   background-color: #545454;
 }
-.btn.follow, .btn.editEnd {
-  transition: all 0.3s;
+.btn.follow, .btn.editEnd, .btn.postBtn {
+  box-shadow: 1px 1px 3px green;
   background-color: green;
 }
-.btn.follow:hover, .btn.editEnd:hover {
-  transition: all 0.3s;
+.btn.follow:hover, .btn.editEnd:hover, .btn.postBtn:hover {
+  box-shadow: 1px 1px 3px rgb(0, 81, 0);
   background-color: rgb(0, 81, 0);
 }
 .btn.del, .btn.cancel {
-  transition: all 0.3s;
+  box-shadow: 1px 1px 3px rgb(212, 0, 0);
   background-color: rgb(212, 0, 0);
 }
 .btn.del:hover, .btn.cancel:hover {
-  transition: all 0.3s;
+  box-shadow: 1px 1px 3px rgb(164, 0, 0);
   background-color: rgb(164, 0, 0);
 }
 .btn.imgDelete {
-  width: 400px;
   margin-top: 10px;
+}
+.btn.resign {
+  margin-top: 10px;
+  box-shadow: 1px 1px 3px rgb(212, 0, 0);
+  background-color: rgb(212, 0, 0) !important;
+}
+.btn.resign:hover {
+  box-shadow: 1px 1px 3px rgb(164, 0, 0);
+  background-color: rgb(164, 0, 0) !important;
 }
 
 h1 {
@@ -149,30 +189,6 @@ h1 {
 .edit-wrap .row-wrap .row > span.notEssential::before {
   content: "";
 }
-.edit-wrap .row-wrap .row input[type=text],
-.edit-wrap .row-wrap .row input[type=password] {
-  border: 1px solid #5baaff;
-  padding: 10px;
-  width: 15vw;
-  transition: all 0.2s;
-  font-family: "NotoSansM", "맑은 고딕", sans-serif;
-}
-.edit-wrap .row-wrap .row input[type=text]:focus,
-.edit-wrap .row-wrap .row input[type=password]:focus {
-  background-color: #5baaff;
-  color: white;
-  transition: all 0.2s;
-}
-.edit-wrap .row-wrap .row input[type=text]:focus::-moz-placeholder, .edit-wrap .row-wrap .row input[type=password]:focus::-moz-placeholder {
-  color: white;
-}
-.edit-wrap .row-wrap .row input[type=text]:focus:-ms-input-placeholder, .edit-wrap .row-wrap .row input[type=password]:focus:-ms-input-placeholder {
-  color: white;
-}
-.edit-wrap .row-wrap .row input[type=text]:focus::placeholder,
-.edit-wrap .row-wrap .row input[type=password]:focus::placeholder {
-  color: white;
-}
 .edit-wrap .row-wrap .row.pwChk {
   margin-bottom: 0;
 }
@@ -198,7 +214,7 @@ h1 {
 
 .container {
   max-width: 100vw;
-  background-color: #e3ecff;
+  background-color: #e3eaff;
   display: flex;
   flex-direction: row;
   align-items: center;
@@ -213,7 +229,30 @@ h1 {
   background-color: #5baaff;
   width: 100%;
   height: 60px;
-  justify-content: flex-end;
+  justify-content: space-between;
+}
+.container .header > div {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+}
+.container .header > div > .link {
+  padding: 0 30px;
+  height: 100%;
+  line-height: 60px;
+  cursor: pointer;
+  color: white;
+  font-family: "NotoSansB", "맑은 고딕", sans-serif;
+  transition: all 0.3s;
+}
+.container .header > div > .link div {
+  color: white;
+  font-family: "NotoSansB", "맑은 고딕", sans-serif;
+}
+.container .header > div > .link:hover {
+  transition: all 0.3s;
+  background-color: #0077ff;
 }
 .container .header .title {
   color: white;
@@ -224,86 +263,12 @@ h1 {
   margin-right: 30px;
   cursor: pointer;
 }
-.container .side-bar {
-  position: fixed;
-  left: 0;
-  top: 0;
-  z-index: 3;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  width: 300px;
-  left: -300px;
-  min-height: 100vh;
-  background-color: #218cff;
-  transition: all 0.3s;
-}
-.container .side-bar > ul {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  height: 100vh;
-  width: 100%;
-  padding: 0;
-}
-.container .side-bar > ul > li {
-  width: 100%;
-  list-style: none;
-  font-family: "NotoSansM", "맑은 고딕", sans-serif;
-  color: #cdcdcd;
-  line-height: 70px;
-  padding-left: 20px;
-}
-.container .side-bar > ul > li a,
-.container .side-bar > ul > li div {
-  display: block;
-  color: #ffffff;
-  text-decoration: none;
-  width: 180px;
-  height: 70px;
-}
-.container .side-bar > ul > li .active {
-  font-family: "NotoSansB", "맑은 고딕", sans-serif;
-  color: #ffffff;
-}
-.container .side-bar > ul > li:hover {
-  cursor: pointer;
-  background-color: #5baaff;
-}
-.container .side-bar > ul > li:hover a,
-.container .side-bar > ul > li:hover div {
-  color: white;
-}
-.container .side-bar.open {
-  transform: translateX(300px);
-  transition: all 0.3s;
-}
-.container .menuBtn {
-  z-index: 4;
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 60px;
-  height: 60px;
-  padding: 0 !important;
-  margin: 0 !important;
-  align-items: center;
-  justify-content: center;
-  display: flex;
-  background-color: transparent !important;
-}
-.container .menuBtn svg {
-  fill: white;
-  width: 25px;
-  height: 25px;
-}
 .container .viewport {
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
+  box-shadow: 1px 2px 10px #81bcff;
   background-color: #ffffff;
   width: 80vw;
   margin-top: 60px;
@@ -311,7 +276,8 @@ h1 {
   padding: 100px 30px;
 }
 .container .viewport .tweet {
-  border: 1px solid #5baaff;
+  cursor: pointer;
+  box-shadow: 1px 2px 10px #81bcff;
   padding: 50px;
   border-radius: 50px;
   margin-bottom: 30px;
@@ -358,35 +324,14 @@ h1 {
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  border: 2px solid #5baaff;
-  box-shadow: 1px 1px 10px #81bcff;
+  box-shadow: 1px 2px 10px #81bcff;
   width: 400px;
   height: 600px;
 }
 .loginForm > input[type=text],
 .loginForm input[type=password] {
-  border: 1px solid #5baaff;
   width: 80%;
-  padding: 10px;
   margin-bottom: 10px;
-  font-family: "NotoSansM", "맑은 고딕", sans-serif;
-  transition: all 0.2s;
-}
-.loginForm > input[type=text]:focus,
-.loginForm input[type=password]:focus {
-  transition: all 0.2s;
-  background-color: #5baaff;
-  color: white;
-}
-.loginForm > input[type=text]:focus::-moz-placeholder, .loginForm input[type=password]:focus::-moz-placeholder {
-  color: white;
-}
-.loginForm > input[type=text]:focus:-ms-input-placeholder, .loginForm input[type=password]:focus:-ms-input-placeholder {
-  color: white;
-}
-.loginForm > input[type=text]:focus::placeholder,
-.loginForm input[type=password]:focus::placeholder {
-  color: white;
 }
 .loginForm .remember_box {
   width: 80%;
@@ -433,8 +378,7 @@ h1 {
   align-items: center;
   justify-content: center;
   padding: 30px;
-  border: 2px solid #5baaff;
-  box-shadow: 1px 1px 10px #81bcff;
+  box-shadow: 1px 2px 10px #81bcff;
 }
 
 .tweet-Home {
@@ -446,23 +390,12 @@ h1 {
 .tweet-Home > hr {
   margin-bottom: 20px;
 }
-.tweet-Home .profile {
-  margin-right: 30px;
-}
 .tweet-Home > .topBar {
   display: flex;
   flex-direction: row;
   align-items: center;
   justify-content: space-between;
   margin-bottom: 30px;
-}
-.tweet-Home > .topBar > div.calc {
-  font-family: "NotoSansB", "맑은 고딕", sans-serif;
-  background-color: transparent;
-  color: #5baaff;
-}
-.tweet-Home > .topBar > div.calc.red {
-  color: #ff3838;
 }
 .tweet-Home > .topBar > select {
   border: 2px solid #81bcff;
@@ -503,7 +436,6 @@ h1 {
 }
 .userList .user .user_id {
   line-height: 30px;
-  text-decoration: none;
   font-family: "NotoSansB", "맑은 고딕", sans-serif;
 }
 
@@ -525,6 +457,8 @@ h1 {
   flex-direction: column;
   align-items: center;
   justify-content: center;
+  box-shadow: 1px 2px 10px #81bcff;
+  padding: 30px;
 }
 .userInfo-edit .row > span::before {
   content: "";
@@ -538,4 +472,114 @@ h1 {
 }
 .userInfo-edit .btn.save {
   margin-top: 30px;
+}
+
+.tweetInfo {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 70%;
+}
+.tweetInfo .profileInfo {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+.tweetInfo .profileInfo > h1 {
+  margin-top: 10px;
+}
+.tweetInfo .profileInfo > span {
+  color: #858585;
+  margin-bottom: 20px;
+}
+.tweetInfo .btns {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+}
+.tweetInfo .btn {
+  width: 250px;
+  margin: 5px;
+}
+.tweetInfo .content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 1px 2px 10px #81bcff;
+  margin-top: 30px;
+  width: 100%;
+  padding: 25px;
+}
+.tweetInfo .content > .contentArea {
+  width: 100%;
+  height: 280px;
+  border: none;
+  resize: none;
+}
+.tweetInfo .content > .contentArea:focus {
+  outline: none;
+}
+.tweetInfo .content > .calc {
+  width: 100%;
+  text-align: right;
+}
+.tweetInfo .content > hr {
+  margin: 15px 0;
+  width: 100%;
+}
+.tweetInfo .content > .commentArea {
+  width: 100%;
+  max-height: 300px;
+  overflow-y: auto;
+}
+.tweetInfo .content > .commentArea > .comment {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 20px;
+}
+.tweetInfo .content > .commentArea > .comment > .commentContent {
+  margin-left: 30px;
+}
+.tweetInfo .content > .commentArea > .comment > .profile {
+  cursor: pointer;
+}
+.tweetInfo .content > .commentArea > .comment > .profile > div {
+  font-family: "NotoSansM", "맑은 고딕", sans-serif;
+}
+.tweetInfo .content > .commentInput {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 70px;
+}
+.tweetInfo .content > .commentInput > textarea {
+  height: 100%;
+  resize: none;
+  border: 1px solid #5baaff;
+  width: 90%;
+  padding: 10px;
+}
+.tweetInfo .content > .commentInput > textarea:focus {
+  outline: none;
+}
+.tweetInfo .content > .commentInput > div {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  width: 10%;
+  background-color: #5baaff;
+  height: 100%;
+  cursor: pointer;
+  font-family: "NotoSansB", "맑은 고딕", sans-serif;
+  color: white;
 }
