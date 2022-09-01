@@ -8,7 +8,6 @@ import {
   updateTweetAPI,
   deleteTweetAPI,
 } from 'js/API';
-import { getCookie } from 'js/cookie';
 import { errorInfo, follow, unFollow, enterFn } from 'js/common';
 
 const DashBoard = () => {
@@ -89,17 +88,18 @@ const DashBoard = () => {
   const renderTweet = () => {
     if (list.length >= 1) {
       return list.reduce(
-        (acc, { user_id, tweet, created_at, follow_chk, id }) => {
+        (acc, { user_id, name, tweet, created_at, follow_chk, id, img }) => {
           return (
             <>
               {acc}
               <div className='tweet'>
                 <div className='tweet-info'>
                   <div className='info-wrap'>
-                    <Link to={`/${user_id}`} className='userId'>
-                      @{user_id}
+                    <Link to={`/${user_id}`} className='profile'>
+                      <img src={img} alt={user_id} className='userImg' />@
+                      {name}
                     </Link>
-                    {localStorage.getItem('myId') === user_id ? (
+                    {sessionStorage.getItem('myId') === user_id ? (
                       id === editIdx && edit ? (
                         <>
                           <div
@@ -204,7 +204,7 @@ const DashBoard = () => {
             {write ? (
               <>
                 {' '}
-                <div className='postBtn' onClick={() => newTweet()}>
+                <div className='btn postBtn' onClick={() => newTweet()}>
                   게시
                 </div>
                 <div className={`calc ${content.length === 1000 ? 'red' : ''}`}>
@@ -213,7 +213,7 @@ const DashBoard = () => {
                     : `입력 가능: ${1000 - content.length}자`}
                 </div>
                 <div
-                  className='cancelBtn'
+                  className='btn cancelBtn'
                   onClick={() => {
                     setWrite(false);
                     setContent('');
@@ -223,7 +223,9 @@ const DashBoard = () => {
               </>
             ) : (
               <>
-                <div onClick={() => setWrite(true)}>글쓰기</div>
+                <div onClick={() => setWrite(true)} className='btn'>
+                  글쓰기
+                </div>
                 <select onChange={e => setView(e.target.value)} value={view}>
                   <option value='all'>전체 트윗 보기</option>
                   <option value='my'>내 트윗 보기</option>

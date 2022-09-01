@@ -1,6 +1,5 @@
 import { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { setCookie, getCookie } from 'js/cookie';
 import { loginAPI } from 'js/API';
 import { errorInfo, enterFn } from 'js/common';
 import Header from './Common/Header';
@@ -20,7 +19,7 @@ const SignIn = () => {
 
   useEffect(() => {
     document.title = '로그인 | Moana Tweet';
-    if (getCookie('myToken')) navigate('/home');
+    if (sessionStorage.getItem('myToken')) navigate('/home');
     if (localStorage.getItem('save-id')) {
       setId(localStorage.getItem('save-id'));
       setCheck(true);
@@ -39,14 +38,11 @@ const SignIn = () => {
     else if (pw.trim() === '') return checkForm('emptyPw', true);
     else checkForm(obj);
     const result = await loginAPI(id, pw);
+    if (result === null) return;
     if (typeof result === 'object') {
-      console.log(result);
       const { access_token } = result?.data;
-      setCookie('myToken', access_token, {
-        path: '/',
-      });
-      localStorage.setItem('myId', id);
-      localStorage.setItem('myPw', pw);
+      sessionStorage.setItem('myToken', access_token);
+      sessionStorage.setItem('myId', id);
       if (check === true) {
         localStorage.setItem('save-id', id);
       } else localStorage.removeItem('save-id');
@@ -107,7 +103,7 @@ const SignIn = () => {
               <p className='highlight'>비밀번호</p>를 입력해 주세요.
             </span>
           )}
-          <div className='loginBtn' onClick={() => loginFn()}>
+          <div className='btn loginBtn' onClick={() => loginFn()}>
             LOGIN
           </div>
         </div>

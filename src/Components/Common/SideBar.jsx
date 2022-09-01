@@ -1,7 +1,5 @@
 import { useState, useEffect } from 'react';
 import { RiMenu4Fill } from 'react-icons/ri';
-import { removeCookie, getCookie } from 'js/cookie';
-import { logout } from 'js/common';
 import { useNavigate, Link, useLocation } from 'react-router-dom';
 
 const SideBar = () => {
@@ -19,6 +17,11 @@ const SideBar = () => {
 
   useEffect(() => {
     if (menuBtn === 'open') window.addEventListener('click', outClick);
+    if (!sessionStorage.getItem('myToken')) {
+      sessionStorage.clear();
+      navigate('/');
+      return alert('로그인이 필요한 서비스입니다.');
+    }
   }, [menuBtn]);
 
   return (
@@ -37,9 +40,9 @@ const SideBar = () => {
           </li>
           <li>
             <Link
-              to={`/${localStorage.getItem('myId')}`}
+              to={`/${sessionStorage.getItem('myId')}`}
               className={
-                path === `/${localStorage.getItem('myId')}` && 'active'
+                path === `/${sessionStorage.getItem('myId')}` && 'active'
               }>
               마이페이지
             </Link>
@@ -47,8 +50,7 @@ const SideBar = () => {
           <li>
             <div
               onClick={() => {
-                localStorage.removeItem('myId');
-                removeCookie('myToken', { path: '/' });
+                sessionStorage.clear();
                 navigate('/');
               }}>
               로그아웃

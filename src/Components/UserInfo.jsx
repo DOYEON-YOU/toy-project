@@ -8,16 +8,20 @@ import {
   updateTweetAPI,
   deleteTweetAPI,
 } from 'js/API';
-import { getCookie } from 'js/cookie';
 import { errorInfo, follow, unFollow, enterFn } from 'js/common';
 
 const UserInfo = () => {
-  const [profile, setProfile] = useState('');
+  const [user, setUser] = useState({
+    name: '',
+    id: '',
+    profile: '',
+    img: '',
+    followChk: ''
+  })
   const [edit, setEdit] = useState(false);
   const [content, setContent] = useState('');
   const [editIdx, setEditIdx] = useState('');
   const [tweets, setTweets] = useState([]);
-  const [followChk, setFollowChk] = useState('');
 
   const navigate = useNavigate();
   const path = useLocation().pathname.replaceAll('/', '');
@@ -35,7 +39,7 @@ const UserInfo = () => {
       prevent = false;
     }, 200);
 
-    if (path === localStorage.getItem('myId')) {
+    if (path === sessionStorage.getItem('myId')) {
       const tweetData = await getTweetAPI('my');
       if (typeof tweetData === 'object') {
         setTweets(tweetData.data);
@@ -50,8 +54,13 @@ const UserInfo = () => {
     if (typeof userData === 'object') {
       userData.data.forEach(obj => {
         if (obj.user_id === path) {
-          setProfile(obj.profile);
-          setFollowChk(obj.follow_chk);
+          setUser({
+            id: obj.user_id,
+            name: obj.name,
+            profile: obj.profile,
+            followChk: obj.follow_chk,
+            img: obj.img,
+          })
         }
       });
     } else return alert(errorInfo[userData]);
@@ -79,15 +88,16 @@ const UserInfo = () => {
   };
 
   const renderTweet = () => {
-    return tweets.reduce((acc, { user_id, tweet, created_at, id }) => {
+    return tweets.reduce((acc, { user_id, name, tweet, created_at, id, img }) => {
       return (
         <>
           {acc}
           <div className='tweet'>
             <div className='tweet-info'>
               <div className='info-wrap'>
-                <div className='userId'>@{user_id}</div>
-                {localStorage.getItem('myId') === user_id &&
+                <img src={img} alt={user_id} className='userImg' />
+                <div className='userId'>@{name}</div>
+                {sessionStorage.getItem('myId') === user_id &&
                   (id === editIdx && edit ? (
                     <>
                       <div className='btn editEnd' onClick={() => editTweet()}>
@@ -147,27 +157,28 @@ const UserInfo = () => {
       <SideBar />
       <div className='viewport'>
         <div className='userInfo'>
-          <h1 className='id'>@{path}</h1>
-          <div className='profile'>{profile}</div>
-          {path === localStorage.getItem('myId') ? (
+          <img src={user.img} alt='' className='profileUserImg' />
+          <h1 className='name'>{user.name}<span className='id'>@{user.id}</span></h1>
+          <div className='profileInfo'>{user.profile}</div>
+          {user.id === sessionStorage.getItem('myId') ? (
             <div className='btn' onClick={() => navigate('/edit')}>
               회원 정보 수정
             </div>
           ) : (
             <div
-              className={`btn ${followChk ? 'unFollow' : 'follow'}`}
+              className={`btn ${user.followChk ? 'unFollow' : 'follow'}`}
               onClick={() => {
-                if (followChk) {
-                  unFollow(path);
+                if (user.followChk) {
+                  unFollow(user.id);
                   getUserInfo();
                   return;
                 } else {
-                  follow(path);
+                  follow(user.id);
                   getUserInfo();
                   return;
                 }
               }}>
-              {followChk ? 'UnFollow' : 'Follow'}
+              {user.followChk ? 'UnFollow' : 'Follow'}
             </div>
           )}
           <hr />

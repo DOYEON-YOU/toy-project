@@ -16,6 +16,25 @@ body,
 .bold {
   font-family: $boldFont;
 }
+.profile {
+  @include flex-style();
+  height: 50px;
+  justify-content: flex-start;
+  text-decoration: none;
+  font-family: $boldFont;
+}
+.userImg {
+  width: 50px;
+  height: 50px;
+  border-radius: 50px;
+  overflow: hidden;
+  margin-right: 10px;
+}
+.profileUserImg {
+  width: 150px;
+  height: 150px;
+  border-radius: 150px;
+}
 .btn {
   @include flex-style();
   font-family: $boldFont;
@@ -25,13 +44,58 @@ body,
   border-radius: 10px;
   margin-right: 10px;
   color: white;
-  transition: all 0.5s;
-  &.follow, &.editEnd {
-  transition: all 0.5s;
-  background-color: green;
+  transition: all 0.3s;
+  background-color: $subColor01;
+  &:hover {
+    background-color: $subColor02;
   }
-  &.del, &.cancel {
+
+  &.loginBtn {
+    width: 70%;
+  }
+  &.signUpBtn {
+    width: 400px;
+    margin-top: 40px;
+  }
+  &.postBtn {
+    background-color: green;
+  }
+  &.cancelBtn {
     background-color: rgb(212, 0, 0);
+  }
+  &.save {
+    margin-top: 30px;
+  }
+  &.unFollow,
+  &.edit {
+    transition: all 0.3s;
+    background-color: $gray03;
+    &:hover {
+      transition: all 0.3s;
+      background-color: $gray02;
+    }
+  }
+  &.follow,
+  &.editEnd {
+    transition: all 0.3s;
+    background-color: green;
+    &:hover {
+      transition: all 0.3s;
+      background-color: rgb(0, 81, 0);
+    }
+  }
+  &.del,
+  &.cancel {
+    transition: all 0.3s;
+    background-color: rgb(212, 0, 0);
+    &:hover {
+      transition: all 0.3s;
+      background-color: rgb(164, 0, 0);
+    }
+  }
+  &.imgDelete {
+    width: 400px;
+    margin-top: 10px;
   }
 }
 h1 {
@@ -41,47 +105,65 @@ h1 {
   margin-bottom: 20px;
   user-select: none;
 }
-.row-wrap {
-  .row {
-    justify-content: space-between;
-    width: 500px;
-    margin-bottom: 30px;
-    > span {
-      margin-right: 20px;
-      &::before {
-        content: '*';
+.edit-wrap {
+  @include flex-style(row);
+  width: 70vw;
+  .row-wrap {
+    margin: 0 20px;
+    .row {
+      justify-content: space-between;
+      width: 30vw;
+      margin-bottom: 30px;
+      > span {
+        margin-right: 20px;
+        &::before {
+          content: '*';
+          color: $highlight_red;
+        }
+        &.notEssential {
+          &::before {
+            content: '';
+          }
+        }
+      }
+      input[type='text'],
+      input[type='password'] {
+        border: 1px solid $mainColor;
+        padding: 10px;
+        width: 15vw;
+        transition: all 0.2s;
+        font-family: $middleFont;
+        &:focus {
+          background-color: $mainColor;
+          color: white;
+          transition: all 0.2s;
+          &::placeholder {
+            color: white;
+          }
+        }
+      }
+      &.pwChk {
+        margin-bottom: 0;
+      }
+      > .same {
+        color: $mainColor;
+      }
+      > .notSame {
         color: $highlight_red;
       }
-      &.notEssential {
-        &::before {
-          content: '';
-        }
-      }
     }
-    input[type='text'],
-    input[type='password'] {
+    .profileImg {
+      width: 400px;
+      height: 400px;
       border: 1px solid $mainColor;
-      padding: 10px;
-      width: 300px;
-      transition: all 0.2s;
-      font-family: $middleFont;
-      &:focus {
-        background-color: $mainColor;
-        color: white;
-        transition: all 0.2s;
-        &::placeholder {
-          color: white;
-        }
+      margin-bottom: 10px;
+      > img {
+        width: 100%;
+        height: 100%;
       }
     }
-    &.pwChk {
-      margin-bottom: 0;
-    }
-    > .same {
-      color: $mainColor;
-    }
-    > .notSame {
-      color: $highlight_red;
+    > input[type='file'] {
+      display: none;
     }
   }
 }
@@ -210,7 +292,7 @@ h1 {
           height: 100px;
           border: 1px solid $mainColor;
           &:focus {
-            outline: none
+            outline: none;
           }
         }
       }
@@ -277,33 +359,13 @@ h1 {
       font-family: $boldFont;
     }
   }
-  .loginBtn {
-    @include flex-style();
-    width: 80%;
-    background-color: $mainColor;
-    padding: 10px;
-    font-family: $boldFont;
-    color: white;
-    cursor: pointer;
-  }
 }
 
 .signUpForm {
   @include flex-style(column);
-  width: 40vw;
-  height: 70vh;
+  padding: 30px;
   border: 2px solid $mainColor;
   box-shadow: 1px 1px 10px $subColor01;
-  .signUpBtn {
-    @include flex-style();
-    width: 400px;
-    background-color: $mainColor;
-    padding: 5px;
-    font-family: $boldFont;
-    color: white;
-    font-size: 25px;
-    cursor: pointer;
-  }
 }
 .tweet-Home {
   width: 70%;
@@ -313,28 +375,20 @@ h1 {
   > hr {
     margin-bottom: 20px;
   }
+  .profile {
+    margin-right: 30px;
+  }
   > .topBar {
     @include flex-style($justifyVal: space-between);
     margin-bottom: 30px;
     > div {
-      cursor: pointer;
-      background-color: $subColor01;
-      padding: 10px;
-      border-radius: 10px;
-      color: white;
-      font-family: $boldFont;
-      &.postBtn {
-        background-color: green;
-      }
       &.calc {
+        font-family: $boldFont;
         background-color: transparent;
         color: $mainColor;
         &.red {
-          color: $highlight_red
+          color: $highlight_red;
         }
-      }
-      &.cancelBtn {
-        background-color: rgb(212, 0, 0);
       }
     }
     > select {
@@ -363,8 +417,8 @@ h1 {
 }
 
 .userList {
+  width: 70%;
   .user {
-    width: 700px;
     @include flex-style($justifyVal: space-between);
     border-bottom: 1px solid $mainColor;
     padding: 30px 0;
@@ -372,6 +426,8 @@ h1 {
       border-bottom: none;
     }
     .user_id {
+      line-height: 30px;
+      text-decoration: none;
       font-family: $boldFont;
     }
   }
@@ -380,7 +436,7 @@ h1 {
 .userInfo {
   width: 70%;
   .id {
-    color: $subColor02;
+    margin-left: 10px;
   }
   hr {
     margin: 30px 0;
@@ -391,25 +447,10 @@ h1 {
 }
 
 .userInfo-edit {
-  width: 80%;
   @include flex-style(column);
-  .edit-wrap {
-    @include flex-style(row);
-    .row-wrap {
-      margin: 0 20px;
-      .profileImg {
-        width: 400px;
-        height: 400px;
-        border: 1px solid $mainColor;
-        margin-bottom: 10px;
-        > img {
-          width: 100%;
-          height: 100%;
-        }
-      }
-      >input[type='file'] {
-        display: none;
-      }
+  .row > span {
+    &::before {
+      content: '';
     }
   }
   .btn {

@@ -25,6 +25,31 @@ body,
   font-family: "NotoSansB", "맑은 고딕", sans-serif;
 }
 
+.profile {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  height: 50px;
+  justify-content: flex-start;
+  text-decoration: none;
+  font-family: "NotoSansB", "맑은 고딕", sans-serif;
+}
+
+.userImg {
+  width: 50px;
+  height: 50px;
+  border-radius: 50px;
+  overflow: hidden;
+  margin-right: 10px;
+}
+
+.profileUserImg {
+  width: 150px;
+  height: 150px;
+  border-radius: 150px;
+}
+
 .btn {
   display: flex;
   flex-direction: row;
@@ -37,14 +62,55 @@ body,
   border-radius: 10px;
   margin-right: 10px;
   color: white;
-  transition: all 0.5s;
+  transition: all 0.3s;
+  background-color: #81bcff;
 }
-.btn.follow, .btn.editEnd {
-  transition: all 0.5s;
+.btn:hover {
+  background-color: #0077ff;
+}
+.btn.loginBtn {
+  width: 70%;
+}
+.btn.signUpBtn {
+  width: 400px;
+  margin-top: 40px;
+}
+.btn.postBtn {
   background-color: green;
 }
-.btn.del, .btn.cancel {
+.btn.cancelBtn {
   background-color: rgb(212, 0, 0);
+}
+.btn.save {
+  margin-top: 30px;
+}
+.btn.unFollow, .btn.edit {
+  transition: all 0.3s;
+  background-color: #878787;
+}
+.btn.unFollow:hover, .btn.edit:hover {
+  transition: all 0.3s;
+  background-color: #545454;
+}
+.btn.follow, .btn.editEnd {
+  transition: all 0.3s;
+  background-color: green;
+}
+.btn.follow:hover, .btn.editEnd:hover {
+  transition: all 0.3s;
+  background-color: rgb(0, 81, 0);
+}
+.btn.del, .btn.cancel {
+  transition: all 0.3s;
+  background-color: rgb(212, 0, 0);
+}
+.btn.del:hover, .btn.cancel:hover {
+  transition: all 0.3s;
+  background-color: rgb(164, 0, 0);
+}
+.btn.imgDelete {
+  width: 400px;
+  margin-top: 10px;
 }
 
 h1 {
@@ -58,53 +124,76 @@ h1 {
           user-select: none;
 }
 
-.row-wrap .row {
+.edit-wrap {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  width: 70vw;
+}
+.edit-wrap .row-wrap {
+  margin: 0 20px;
+}
+.edit-wrap .row-wrap .row {
   justify-content: space-between;
-  width: 500px;
+  width: 30vw;
   margin-bottom: 30px;
 }
-.row-wrap .row > span {
+.edit-wrap .row-wrap .row > span {
   margin-right: 20px;
 }
-.row-wrap .row > span::before {
+.edit-wrap .row-wrap .row > span::before {
   content: "*";
   color: #ff3838;
 }
-.row-wrap .row > span.notEssential::before {
+.edit-wrap .row-wrap .row > span.notEssential::before {
   content: "";
 }
-.row-wrap .row input[type=text],
-.row-wrap .row input[type=password] {
+.edit-wrap .row-wrap .row input[type=text],
+.edit-wrap .row-wrap .row input[type=password] {
   border: 1px solid #5baaff;
   padding: 10px;
-  width: 300px;
+  width: 15vw;
   transition: all 0.2s;
   font-family: "NotoSansM", "맑은 고딕", sans-serif;
 }
-.row-wrap .row input[type=text]:focus,
-.row-wrap .row input[type=password]:focus {
+.edit-wrap .row-wrap .row input[type=text]:focus,
+.edit-wrap .row-wrap .row input[type=password]:focus {
   background-color: #5baaff;
   color: white;
   transition: all 0.2s;
 }
-.row-wrap .row input[type=text]:focus::-moz-placeholder, .row-wrap .row input[type=password]:focus::-moz-placeholder {
+.edit-wrap .row-wrap .row input[type=text]:focus::-moz-placeholder, .edit-wrap .row-wrap .row input[type=password]:focus::-moz-placeholder {
   color: white;
 }
-.row-wrap .row input[type=text]:focus:-ms-input-placeholder, .row-wrap .row input[type=password]:focus:-ms-input-placeholder {
+.edit-wrap .row-wrap .row input[type=text]:focus:-ms-input-placeholder, .edit-wrap .row-wrap .row input[type=password]:focus:-ms-input-placeholder {
   color: white;
 }
-.row-wrap .row input[type=text]:focus::placeholder,
-.row-wrap .row input[type=password]:focus::placeholder {
+.edit-wrap .row-wrap .row input[type=text]:focus::placeholder,
+.edit-wrap .row-wrap .row input[type=password]:focus::placeholder {
   color: white;
 }
-.row-wrap .row.pwChk {
+.edit-wrap .row-wrap .row.pwChk {
   margin-bottom: 0;
 }
-.row-wrap .row > .same {
+.edit-wrap .row-wrap .row > .same {
   color: #5baaff;
 }
-.row-wrap .row > .notSame {
+.edit-wrap .row-wrap .row > .notSame {
   color: #ff3838;
+}
+.edit-wrap .row-wrap .profileImg {
+  width: 400px;
+  height: 400px;
+  border: 1px solid #5baaff;
+  margin-bottom: 10px;
+}
+.edit-wrap .row-wrap .profileImg > img {
+  width: 100%;
+  height: 100%;
+}
+.edit-wrap .row-wrap > input[type=file] {
+  display: none;
 }
 
 .container {
@@ -337,41 +426,15 @@ h1 {
   color: #81bcff;
   font-family: "NotoSansB", "맑은 고딕", sans-serif;
 }
-.loginForm .loginBtn {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: center;
-  width: 80%;
-  background-color: #5baaff;
-  padding: 10px;
-  font-family: "NotoSansB", "맑은 고딕", sans-serif;
-  color: white;
-  cursor: pointer;
-}
 
 .signUpForm {
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  width: 40vw;
-  height: 70vh;
+  padding: 30px;
   border: 2px solid #5baaff;
   box-shadow: 1px 1px 10px #81bcff;
-}
-.signUpForm .signUpBtn {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: center;
-  width: 400px;
-  background-color: #5baaff;
-  padding: 5px;
-  font-family: "NotoSansB", "맑은 고딕", sans-serif;
-  color: white;
-  font-size: 25px;
-  cursor: pointer;
 }
 
 .tweet-Home {
@@ -383,6 +446,9 @@ h1 {
 .tweet-Home > hr {
   margin-bottom: 20px;
 }
+.tweet-Home .profile {
+  margin-right: 30px;
+}
 .tweet-Home > .topBar {
   display: flex;
   flex-direction: row;
@@ -390,26 +456,13 @@ h1 {
   justify-content: space-between;
   margin-bottom: 30px;
 }
-.tweet-Home > .topBar > div {
-  cursor: pointer;
-  background-color: #81bcff;
-  padding: 10px;
-  border-radius: 10px;
-  color: white;
-  font-family: "NotoSansB", "맑은 고딕", sans-serif;
-}
-.tweet-Home > .topBar > div.postBtn {
-  background-color: green;
-}
 .tweet-Home > .topBar > div.calc {
+  font-family: "NotoSansB", "맑은 고딕", sans-serif;
   background-color: transparent;
   color: #5baaff;
 }
 .tweet-Home > .topBar > div.calc.red {
   color: #ff3838;
-}
-.tweet-Home > .topBar > div.cancelBtn {
-  background-color: rgb(212, 0, 0);
 }
 .tweet-Home > .topBar > select {
   border: 2px solid #81bcff;
@@ -434,8 +487,10 @@ h1 {
   font-size: 20px;
 }
 
+.userList {
+  width: 70%;
+}
 .userList .user {
-  width: 700px;
   display: flex;
   flex-direction: row;
   align-items: center;
@@ -447,6 +502,8 @@ h1 {
   border-bottom: none;
 }
 .userList .user .user_id {
+  line-height: 30px;
+  text-decoration: none;
   font-family: "NotoSansB", "맑은 고딕", sans-serif;
 }
 
@@ -454,7 +511,7 @@ h1 {
   width: 70%;
 }
 .userInfo .id {
-  color: #0077ff;
+  margin-left: 10px;
 }
 .userInfo hr {
   margin: 30px 0;
@@ -464,33 +521,13 @@ h1 {
 }
 
 .userInfo-edit {
-  width: 80%;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
 }
-.userInfo-edit .edit-wrap {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: center;
-}
-.userInfo-edit .edit-wrap .row-wrap {
-  margin: 0 20px;
-}
-.userInfo-edit .edit-wrap .row-wrap .profileImg {
-  width: 400px;
-  height: 400px;
-  border: 1px solid #5baaff;
-  margin-bottom: 10px;
-}
-.userInfo-edit .edit-wrap .row-wrap .profileImg > img {
-  width: 100%;
-  height: 100%;
-}
-.userInfo-edit .edit-wrap .row-wrap > input[type=file] {
-  display: none;
+.userInfo-edit .row > span::before {
+  content: "";
 }
 .userInfo-edit .btn {
   width: 400px;

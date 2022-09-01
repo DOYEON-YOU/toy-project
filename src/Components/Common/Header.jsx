@@ -1,12 +1,11 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import { getCookie } from 'js/cookie';
 
 const Header = () => {
   const navigate = useNavigate();
 
   const movePage = () => {
-    if (getCookie('myToken')) navigate('/home');
+    if (sessionStorage.getItem('myToken')) navigate('/home');
     else navigate('/');
   };
 

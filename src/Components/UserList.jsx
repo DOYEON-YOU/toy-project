@@ -4,7 +4,6 @@ import Header from './Common/Header';
 import SideBar from './Common/SideBar';
 import { getUserAPI } from 'js/API';
 import { errorInfo, follow, unFollow } from 'js/common';
-import { getCookie } from 'js/cookie';
 
 const UserList = () => {
   const [list, setList] = useState([]);
@@ -27,18 +26,18 @@ const UserList = () => {
   };
 
   const renderList = () => {
-    return list.reduce((acc, { user_id, profile, follow_chk }) => {
+    return list.reduce((acc, { user_id, name, profile, follow_chk, img }) => {
       return (
         <>
           {acc}
           <div className='user'>
             <div>
-              <Link to={`/${user_id}`} className='user_id'>
-                @{user_id}
+              <Link to={`/${user_id}`} className='profile'>
+                <img src={img} alt={user_id} className='userImg' />@{name}
               </Link>
               <div>{profile}</div>
             </div>
-            {localStorage.getItem('myId') !== user_id && (
+            {sessionStorage.getItem('myId') !== user_id && (
               <div
                 className={`btn ${follow_chk ? 'unFollow' : 'follow'}`}
                 onClick={() => {
