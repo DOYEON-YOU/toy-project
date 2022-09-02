@@ -1,4 +1,4 @@
-import React from 'react';
+import {useEffect} from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 
 const Header = () => {
@@ -6,10 +6,19 @@ const Header = () => {
   const path = useLocation().pathname;
 
   const movePage = () => {
-    console.log(path);
     if (sessionStorage.getItem('myToken')) navigate('/home');
     else navigate('/');
   };
+
+  useEffect(() => {
+    if (!sessionStorage.getItem('myToken')) {
+      if (path === '/' || path === '/sign-up') return;
+      else {
+        navigate('/')
+        return alert('로그인이 필요한 서비스입니다.')
+      }
+    }
+  }, [])
 
   return (
     <div className='header'>
