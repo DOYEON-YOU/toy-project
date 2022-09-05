@@ -51,7 +51,7 @@ export const signUpAPI = async query => {
 };
 
 //~ 회원탈퇴
-export const resignAPI = async (pw) => {
+export const resignAPI = async pw => {
   try {
     return await axios.post(
       `/api/resign?user_id=${sessionStorage.getItem('myId')}&password=${pw}`
@@ -68,6 +68,15 @@ export const getUserAPI = async () => {
     return await axios.get(
       `/api/user/list?user_id=${sessionStorage.getItem('myId')}`
     );
+  } catch (error) {
+    return errorHandling(error);
+  }
+};
+
+//~ 회원 정보 수정
+export const editUserInfoAPI = async query => {
+  try {
+    return await axios.post(`/api/user/update`, query, { headers });
   } catch (error) {
     return errorHandling(error);
   }
@@ -99,10 +108,10 @@ export const unFollowAPI = async target => {
   }
 };
 
-//~ 회원 정보 수정
-export const editUserInfoAPI = async query => {
+//~ 팔로잉 / 팔로워 리스트
+export const getFollowAPI = async (target, user_id) => {
   try {
-    return await axios.post(`/api/user/update`, query, { headers });
+    return await axios.get(`/api/user/${target}_list?user_id=${user_id}`);
   } catch (error) {
     return errorHandling(error);
   }
@@ -155,6 +164,56 @@ export const deleteTweetAPI = async tweet_id => {
       `/api/tweet/delete?user_id=${sessionStorage.getItem(
         'myId'
       )}&tweet_id=${tweet_id}`
+    );
+  } catch (error) {
+    return errorHandling(error);
+  }
+};
+
+//~ 댓글 불러오기
+export const getCommentAPI = async tweet_id => {
+  try {
+    return await axios.get(`/api/tweet/comment?tweet_id=${tweet_id}`, {
+      headers,
+    });
+  } catch (error) {
+    return errorHandling(error);
+  }
+};
+
+//~ 댓글 작성
+export const postCommentAPI = async (tweet_id, comment) => {
+  try {
+    return await axios.post(
+      `/api/tweet/comment/posting?tweet_id=${tweet_id}&user_id=${sessionStorage.getItem(
+        'myId'
+      )}&comment=${comment}`
+    );
+  } catch (error) {
+    return errorHandling(error);
+  }
+};
+
+//~ 댓글 수정
+export const editCommentAPI = async (comment_id, comment) => {
+  try {
+    return await axios.post(
+      `/api/tweet/comment/update?user_id=${sessionStorage.getItem(
+        'myId'
+      )}&comment_id=${comment_id}&update_comment=${comment}`
+    );
+  } catch (error) {
+    return errorHandling(error);
+  }
+};
+
+//~ 댓글 삭제
+export const delCommentAPI = async comment_id => {
+  try {
+    return await axios.post(
+      `/api/tweet/comment/delete?user_id=${sessionStorage.getItem(
+        'myId'
+      )}&comment_id=${comment_id}`
     );
   } catch (error) {
     return errorHandling(error);

@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import Header from './Common/Header';
+import Header from '../Common/Header';
 import { signInAPI } from 'js/API';
 import { enterFn } from 'js/common';
 import { errorInfo } from 'js/array';

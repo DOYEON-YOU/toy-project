@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import defaultUserImg from 'Image/user.png';
 import { useNavigate } from 'react-router-dom';
-import Header from './Common/Header';
+import Header from '../Common/Header';
 import { errorInfo, guideInfo } from 'js/array';
 import { enterFn, readImage, changeState, checkForm } from 'js/common';
 import { signUpAPI } from 'js/API';
@@ -10,7 +10,7 @@ const SignUp = () => {
   const [user, setUser] = useState({
     email: '',
     name: '',
-    id: '',
+    user_id: '',
     password: '',
     profile: '',
     img: defaultUserImg,
@@ -86,8 +86,10 @@ const SignUp = () => {
                 <span>아이디</span>
                 <input
                   type='text'
-                  value={user.id}
-                  onChange={e => changeState(setUser, 'id', e.target.value)}
+                  value={user.user_id}
+                  onChange={e =>
+                    changeState(setUser, 'user_id', e.target.value)
+                  }
                   onKeyDown={e => enterFn(e, signUpFn)}
                   placeholder='ID'
                 />

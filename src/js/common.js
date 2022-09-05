@@ -40,10 +40,10 @@ export const checkForm = (str, user, setUser, pwChk, setPwChk, pwGuide) => {
 
   if (str === 'signUp') {
     password = user.password;
-    if (user.id.trim() === '') {
+    if (user.user_id.trim() === '') {
       alert('아이디를 입력해 주세요.');
       return false;
-    } else if (!idRegExp.test(user.id)) {
+    } else if (!idRegExp.test(user.user_id)) {
       changeState(setUser, 'id', '');
       alert('아이디는 영문(대소문자)와 숫자만 사용 가능합니다.');
       return false;

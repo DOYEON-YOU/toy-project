@@ -62,6 +62,22 @@ a {
   color: #ff3838;
 }
 
+.user {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid #5baaff;
+  padding: 30px 0;
+}
+.user:last-child {
+  border-bottom: none;
+}
+.user .user_id {
+  line-height: 30px;
+  font-family: "NotoSansB", "맑은 고딕", sans-serif;
+}
+
 input[type=text],
 input[type=password] {
   box-shadow: 1px 1px 4px #81bcff;
@@ -254,6 +270,12 @@ h1 {
   transition: all 0.3s;
   background-color: #0077ff;
 }
+.container .header > div > .link.active {
+  background-color: #81bcff;
+}
+.container .header > div > .link.active:hover {
+  background-color: #0077ff;
+}
 .container .header .title {
   color: white;
   text-align: end;
@@ -274,6 +296,20 @@ h1 {
   margin-top: 60px;
   min-height: calc(100vh - 60px);
   padding: 100px 30px;
+}
+.container .viewport > div {
+  width: 70%;
+}
+.container .viewport > div.loginForm {
+  width: 400px;
+}
+.container .viewport > div.signUpForm {
+  width: auto;
+  padding: 30px;
+}
+.container .viewport > div.userInfo-edit {
+  width: auto;
+  padding: 30px;
 }
 .container .viewport .tweet {
   cursor: pointer;
@@ -325,7 +361,6 @@ h1 {
   align-items: center;
   justify-content: center;
   box-shadow: 1px 2px 10px #81bcff;
-  width: 400px;
   height: 600px;
 }
 .loginForm > input[type=text],
@@ -377,7 +412,6 @@ h1 {
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  padding: 30px;
   box-shadow: 1px 2px 10px #81bcff;
 }
 
@@ -423,26 +457,38 @@ h1 {
 .userList {
   width: 70%;
 }
-.userList .user {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: space-between;
-  border-bottom: 1px solid #5baaff;
-  padding: 30px 0;
-}
-.userList .user:last-child {
-  border-bottom: none;
-}
-.userList .user .user_id {
-  line-height: 30px;
-  font-family: "NotoSansB", "맑은 고딕", sans-serif;
-}
 
 .userInfo {
   width: 70%;
 }
-.userInfo .id {
+.userInfo > .userInfo-detail {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+}
+.userInfo > .userInfo-detail > .countUser {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+}
+.userInfo > .userInfo-detail > .countUser > .countUserInfo {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100px;
+  margin-left: 50px;
+}
+.userInfo > .userInfo-detail > .countUser > .countUserInfo :first-child {
+  font-family: "NotoSansM", "맑은 고딕", sans-serif;
+  color: #0077ff;
+}
+.userInfo > .userInfo-detail > .countUser > .countUserInfo :nth-child(2) {
+  font-family: "NotoSansB", "맑은 고딕", sans-serif;
+}
+.userInfo > .userInfo-detail .id {
   margin-left: 10px;
 }
 .userInfo hr {
@@ -458,7 +504,6 @@ h1 {
   align-items: center;
   justify-content: center;
   box-shadow: 1px 2px 10px #81bcff;
-  padding: 30px;
 }
 .userInfo-edit .row > span::before {
   content: "";
@@ -541,17 +586,56 @@ h1 {
   display: flex;
   flex-direction: row;
   align-items: center;
-  justify-content: center;
+  justify-content: space-between;
+  width: 100%;
+  padding: 0 10px;
   margin-bottom: 20px;
 }
 .tweetInfo .content > .commentArea > .comment > .commentContent {
-  margin-left: 30px;
+  padding: 20px;
+  width: 25vw;
+  overflow: auto;
+}
+.tweetInfo .content > .commentArea > .comment > .commentContent.txt {
+  width: 100%;
+  height: -webkit-fit-content;
+  height: -moz-fit-content;
+  height: fit-content;
+  resize: none;
+  border: none;
+}
+.tweetInfo .content > .commentArea > .comment > .commentContent.txt:focus {
+  outline: none;
 }
 .tweetInfo .content > .commentArea > .comment > .profile {
+  width: 8vw;
   cursor: pointer;
 }
 .tweetInfo .content > .commentArea > .comment > .profile > div {
   font-family: "NotoSansM", "맑은 고딕", sans-serif;
+}
+.tweetInfo .content > .commentArea > .comment > .info {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  color: #858585;
+}
+.tweetInfo .content > .commentArea > .comment > .info > .btns > svg {
+  cursor: pointer;
+  margin-left: 5px;
+  width: 20px;
+  height: 20px;
+  fill: #aaaaaa;
+}
+.tweetInfo .content > .commentArea > .comment > .info > .btns > svg > path {
+  stroke: #aaaaaa;
+}
+.tweetInfo .content > .commentArea > .comment > .info > .btns > svg:hover {
+  fill: #81bcff;
+}
+.tweetInfo .content > .commentArea > .comment > .info > .btns > svg:hover > path {
+  stroke: #81bcff;
 }
 .tweetInfo .content > .commentInput {
   display: flex;

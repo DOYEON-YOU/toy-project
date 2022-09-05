@@ -1,19 +1,45 @@
 import { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
+import { GrEdit } from 'react-icons/gr';
+import {
+  MdOutlineDeleteOutline,
+  MdOutlineClear,
+  MdCheck,
+} from 'react-icons/md';
 import Header from './Common/Header';
-import { getTweetAPI, updateTweetAPI, deleteTweetAPI } from 'js/API';
+import {
+  getTweetAPI,
+  updateTweetAPI,
+  deleteTweetAPI,
+  postCommentAPI,
+  getCommentAPI,
+  editCommentAPI,
+  delCommentAPI,
+} from 'js/API';
 import { follow, unFollow, enterFn } from 'js/common';
 import { errorInfo } from 'js/array';
 
 const TweetInfo = () => {
   const [info, setInfo] = useState({});
   const [content, setContent] = useState('');
-  const [comment, setComment] = useState('');
   const [edit, setEdit] = useState(false);
+  const [comment, setComment] = useState('');
+  const [commentList, setCommentList] = useState([]);
+  const [commentEdit, setCommentEdit] = useState(false);
+  const [commentEditContent, setCommentEditContent] = useState('');
+  const [commentEditIdx, setCommentEditIdx] = useState('');
+
   const { id } = useParams();
   let prevent = false;
 
   const navigate = useNavigate();
+
+  const getComment = async () => {
+    const result = await getCommentAPI(id);
+    if (typeof result === 'object') {
+      setCommentList(result.data);
+    } else return alert(errorInfo[result]);
+  };
 
   const getTweet = async () => {
     if (prevent) return;
@@ -24,9 +50,10 @@ const TweetInfo = () => {
     const result = await getTweetAPI('all');
     if (typeof result === 'object') {
       result.data.forEach(obj => {
-        if (obj.id === Number(id)) {
+        if (obj.tweet_id === Number(id)) {
           setInfo(obj);
           setContent(obj.tweet);
+          getComment();
         }
       });
     }
@@ -50,6 +77,106 @@ const TweetInfo = () => {
       navigate('/home');
       return alert('삭제 되었습니다.');
     } else return alert(errorInfo[result]);
+  };
+
+  const postComment = async () => {
+    const result = await postCommentAPI(info.tweet_id, comment);
+    if (typeof result === 'object') {
+      getComment();
+      setComment('');
+    } else return alert(errorInfo[result]);
+  };
+
+  const editComment = async () => {
+    const result = await editCommentAPI(commentEditIdx, commentEditContent);
+    if (typeof result === 'object') {
+      setCommentEdit(false);
+      getComment();
+    } else return alert(errorInfo[result]);
+  };
+
+  const delComment = async comment_id => {
+    if (!window.confirm('댓글을 삭제하시겠습니까?')) return;
+    const result = await delCommentAPI(comment_id);
+    if (typeof result === 'object') {
+      alert('삭제되었습니다.');
+      getComment();
+    } else return alert(errorInfo[result]);
+  };
+
+  const renderComment = () => {
+    if (commentList.length >= 1) {
+      return commentList.reduce(
+        (acc, { user_id, name, img, comment, comment_id, created_at }) => {
+          return (
+            <>
+              {acc}
+              <div className='comment'>
+                <div
+                  className='profile'
+                  onClick={() => navigate(`/${user_id}`)}>
+                  <img src={img} alt={user_id} className='userImg' />
+                  <div>{name}</div>
+                </div>
+                {comment_id === commentEditIdx && commentEdit ? (
+                  <textarea
+                    autoFocus
+                    defaultValue={comment}
+                    className='commentContent txt'
+                    onChange={e => setCommentEditContent(e.target.value)}
+                    onKeyDown={e => enterFn(e, editComment)}
+                  />
+                ) : (
+                  <div className='commentContent'>{comment}</div>
+                )}
+                <div className='info'>
+                  {sessionStorage.getItem('myId') === user_id ? (
+                    <div className='btns'>
+                      {comment_id === commentEditIdx && commentEdit ? (
+                        <>
+                          <MdCheck onClick={() => editComment()} />
+                          <MdOutlineClear
+                            onClick={() => {
+                              if (!window.confirm('수정을 취소하시겠습니까?'))
+                                return;
+                              setCommentEditContent(comment);
+                              setCommentEdit(false);
+                              setCommentEditIdx('');
+                            }}
+                          />
+                        </>
+                      ) : (
+                        <>
+                          <GrEdit
+                            onClick={() => {
+                              setCommentEdit(true);
+                              setCommentEditIdx(comment_id);
+                            }}
+                          />
+                          <MdOutlineDeleteOutline
+                            onClick={() => delComment(comment_id)}
+                          />
+                        </>
+                      )}
+                    </div>
+                  ) : (
+                    user_id === sessionStorage.getItem('myId') && (
+                      <>
+                        <div className='btns'>
+                          <MdOutlineDeleteOutline />
+                        </div>
+                      </>
+                    )
+                  )}
+                  {created_at.replaceAll('T', ' ')}
+                </div>
+              </div>
+            </>
+          );
+        },
+        <></>
+      );
+    } else return <></>;
   };
 
   useEffect(() => {
@@ -154,25 +281,19 @@ const TweetInfo = () => {
                 : `입력 가능: ${1000 - content.length}자`}
             </div>
             <hr />
-            <div className='commentArea'>
-              <div className='comment'>
-                <div
-                  className='profile'
-                  onClick={() => navigate(`/${info.user_id}`)}>
-                  <img src={info.img} alt={info.user_id} className='userImg' />
-                  <div>{info.name}</div>
-                </div>
-                <div className='commentContent'>
-                  으아아ㅓㅇㄹ미ㅏㄴ어리마넝리ㅏㅁ넝리ㅏㅁ넝
-                </div>
-              </div>
-            </div>
+            <div className='commentArea'>{renderComment()}</div>
             <div className='commentInput'>
               <textarea
                 value={comment}
                 onChange={e => setComment(e.target.value)}
+                onKeyDown={e => enterFn(e, postComment)}
               />
-              <div>전송</div>
+              <div onClick={() => postComment()}>전송</div>
+            </div>
+            <div className={`calc ${content.length === 1000 ? 'red' : ''}`}>
+              {comment.length === 1000
+                ? '입력 불가'
+                : `입력 가능: ${1000 - comment.length}자`}
             </div>
           </div>
         </div>

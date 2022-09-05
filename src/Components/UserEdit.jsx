@@ -8,7 +8,7 @@ import { errorInfo, guideInfo } from 'js/array';
 
 const UserEdit = () => {
   const [user, setUser] = useState({
-    id: sessionStorage.getItem('myId'),
+    user_id: sessionStorage.getItem('myId'),
     password: '',
     new_password: '',
     email: '',

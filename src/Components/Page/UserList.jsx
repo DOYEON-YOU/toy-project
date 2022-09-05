@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import Header from './Common/Header';
+import Header from '../Common/Header';
 import { getUserAPI } from 'js/API';
 import { errorInfo } from 'js/array';
 import { follow, unFollow } from 'js/common';

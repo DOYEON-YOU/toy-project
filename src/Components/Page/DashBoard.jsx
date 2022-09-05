@@ -1,10 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import Header from './Common/Header';
-import {
-  getTweetAPI,
-  newTweetAPI,
-} from 'js/API';
+import Header from '../Common/Header';
+import { getTweetAPI, newTweetAPI } from 'js/API';
 import { errorInfo } from 'js/array';
 import { enterFn } from 'js/common';
 
@@ -58,11 +55,13 @@ const DashBoard = () => {
   const renderTweet = () => {
     if (list.length >= 1) {
       return list.reduce(
-        (acc, { user_id, name, tweet, created_at, id, img }) => {
+        (acc, { user_id, name, tweet, created_at, tweet_id, img }) => {
           return (
             <>
               {acc}
-              <div className='tweet' onClick={() => navigate(`/tweet/${id}`)}>
+              <div
+                className='tweet'
+                onClick={() => navigate(`/tweet/${tweet_id}`)}>
                 <div className='tweet-info'>
                   <div className='profile'>
                     <img src={img} alt={user_id} className='userImg' />@{name}
