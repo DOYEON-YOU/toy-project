@@ -1,17 +1,19 @@
+import { getCookie } from 'js/cookie';
 import { useEffect } from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
+import { removeCookie } from '../../js/cookie';
 
 const Header = () => {
   const navigate = useNavigate();
   const path = useLocation().pathname;
 
   const movePage = () => {
-    if (sessionStorage.getItem('myToken')) navigate('/home');
+    if (getCookie('myToken')) navigate('/home');
     else navigate('/');
   };
 
   useEffect(() => {
-    if (!sessionStorage.getItem('myToken')) {
+    if (!getCookie('myToken')) {
       if (path === '/' || path === '/sign-up') return;
       else {
         navigate('/');
@@ -48,6 +50,7 @@ const Header = () => {
               className='link'
               onClick={() => {
                 sessionStorage.clear();
+                removeCookie('myToken')
                 navigate('/');
               }}>
               로그아웃

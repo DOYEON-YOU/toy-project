@@ -4,6 +4,7 @@ import Header from '../Common/Header';
 import { signInAPI } from 'js/API';
 import { enterFn } from 'js/common';
 import { errorInfo } from 'js/array';
+import { setCookie, getCookie } from 'js/cookie';
 
 const SignIn = () => {
   const [id, setId] = useState('');
@@ -20,7 +21,7 @@ const SignIn = () => {
 
   useEffect(() => {
     document.title = '로그인 | Moana Tweet';
-    if (sessionStorage.getItem('myToken')) navigate('/home');
+    if (getCookie('myToken')) navigate('/home');
     if (localStorage.getItem('save-id')) {
       setId(localStorage.getItem('save-id'));
       setCheck(true);
@@ -42,7 +43,9 @@ const SignIn = () => {
     if (result === null) return;
     if (typeof result === 'object') {
       const { access_token } = result?.data;
-      sessionStorage.setItem('myToken', access_token);
+      setCookie('myToken', access_token, {
+        path: '/'
+      })
       sessionStorage.setItem('myId', id);
       if (check === true) {
         localStorage.setItem('save-id', id);
